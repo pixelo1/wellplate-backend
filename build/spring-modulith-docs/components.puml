@@ -1,0 +1,17 @@
+@startuml
+set separator none
+
+top to bottom direction
+
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+  componentStyle uml1
+}
+
+hide stereotype
+
+
+@enduml

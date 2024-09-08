@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.pixelo.health.wellplate.ArchitectureTests" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-09-08T06:46:05" hostname="hyun" time="0.704">
+  <properties/>
+  <testcase name="addRule" classname="com.pixelo.health.wellplate.ArchitectureTests" time="0.638"/>
+  <testcase name="archRule" classname="com.pixelo.health.wellplate.ArchitectureTests" time="0.066"/>
+  <system-out><![CDATA[15:46:05.208 [Test worker] INFO com.tngtech.archunit.core.PluginLoader -- Detected Java version 21.0.1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
