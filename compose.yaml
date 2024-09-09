@@ -1,7 +1,7 @@
 services:
   db:
     image: postgis/postgis:16-3.4
-    container_name: db
+    container_name: rdb
     ports:
       - "${DB_PORT:-5432}:5432"
     environment:
