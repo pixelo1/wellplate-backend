@@ -1,39 +1,42 @@
 server:
   port: 8080
-# ? ???? ??? ??? ????
+
 spring:
   application:
     name: well-plate
   profiles:
     active: default
   datasource:
-    driver-class-name: org.postgresql.Driver # ?????? ???? ??? ??
-    url: "jdbc:${db.engine}://${db.host}:${db.port},${db.host}:${db.port}/${db.dbname}?targetServerType=primary" # ?????? ?? URL
-    username: "${db.username}"
-    password: "${db.password}"
+    driver-class-name: org.postgresql.Driver
+    url: "jdbc:${rdb.engine}://${rdb.host}:${rdb.port},${rdb.host}:${rdb.port}/${rdb.dbname}?targetServerType=primary"
+    username: "${rdb.username}"
+    password: "${rdb.password}"
     connectionTestQuery: "SELECT 1"
     hikari:
-      maximum-pool-size: 15   # ?? ??? ? ??
-      minimum-idle: 15      # ?? ??? ? ??
-      connection-timeout: 5000 # ??? ????
-      validation-timeout: 2000 # ??? ??? ?? ????
+      maximum-pool-size: 15
+      minimum-idle: 15
+      connection-timeout: 5000
+      validation-timeout: 2000
   jpa:
     database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect # ?????? ???
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop
-#      ddl-auto: validate # create disabled: schema has been managed by flyway on docker-compose
+#      ddl-auto: create-drop
+      ddl-auto: validate # create disabled: schema has been managed by flyway on docker-compose
     properties:
+      hibernate:
+        default_schema: public # event테이블 public 에서 찾도록 명시
       format_sql: true
       show-sql:
         use_sql_comments: ${logging.default-show-sql}
         use_jdbc_metadata_defaults: ${logging.default-show-sql}
-#  flyway:
-#    enabled: true
-#    create-schemas: true
-#    baseline-on-migrate: true
-#    baseline-version: 0
-#    out-of-order: true
+  flyway:
+    enabled: true
+    create-schemas: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    out-of-order: true
+    default-schema: public # flyway public 스키마를 사용
 
 
 logging:
