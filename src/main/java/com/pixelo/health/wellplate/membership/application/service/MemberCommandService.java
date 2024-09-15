@@ -1,8 +1,9 @@
-package com.pixelo.health.wellplate.membership.application.in.service;
+package com.pixelo.health.wellplate.membership.application.service;
 
 import com.pixelo.health.wellplate.membership.application.in.command.MemberInputPort;
 import com.pixelo.health.wellplate.membership.application.in.command.RegisterMemberCommand;
-import com.pixelo.health.wellplate.membership.application.in.vo.MemberVo;
+import com.pixelo.health.wellplate.membership.domain.provider.MemberProviderImpl;
+import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
 import com.pixelo.health.wellplate.membership.application.out.MemberOutputPort;
 import com.pixelo.health.wellplate.membership.domain.domainservices.MemberFactory;
 import com.pixelo.health.wellplate.membership.domain.domainservices.dtos.CreateMemberDto;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberCommandService implements MemberInputPort {
     private final MemberOutputPort memberOutputPort;
-    private final MemberVoConverter memberVoConverter;
+    private final MemberMapStruct memberMapStruct;
     @Override
     public MemberVo registerMemberCommand(RegisterMemberCommand command) {
         var dto = CreateMemberDto.builder()
@@ -23,8 +24,8 @@ public class MemberCommandService implements MemberInputPort {
                 .password(command.password())
                 .build();
 
-        var member = MemberFactory.createMember(dto);
-        var savedMember = memberOutputPort.save(member);
-        return memberVoConverter.toMemberVo(savedMember);
+        var member = MemberFactory.createMemberTypeOfWellnessChallenger(dto);
+        var savedMember = MemberProviderImpl.from(memberOutputPort.save(member));
+        return memberMapStruct.toMemberVo(savedMember);
     }
 }
