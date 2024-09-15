@@ -1,4 +1,4 @@
-package com.pixelo.health.wellplate.membership.application.in.vo;
+package com.pixelo.health.wellplate.membership.application.vo;
 
 import lombok.Builder;
 
@@ -8,6 +8,7 @@ import java.util.UUID;
 public record MemberVo(
         UUID memberId,
         String email,
-        String password
+        String password,
+        String memberType
 ) {
 }

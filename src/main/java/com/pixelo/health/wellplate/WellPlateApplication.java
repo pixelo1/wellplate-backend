@@ -7,7 +7,7 @@ import org.springframework.modulith.Modulithic;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
-@Modulithic(sharedModules = {"com.pixelo.health.wellplate.core"})
+@Modulithic(sharedModules = {"core"})
 public class WellPlateApplication {
 
     public static void main(String[] args) {

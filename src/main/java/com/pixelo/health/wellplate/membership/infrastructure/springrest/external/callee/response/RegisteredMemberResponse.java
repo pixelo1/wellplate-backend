@@ -1,6 +1,5 @@
 package com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee.response;
 
-import com.pixelo.health.wellplate.membership.application.in.vo.MemberVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,11 +10,9 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class RegisteredMemberResponse {
-    private UUID memberId;
+    UUID memberId;
+    String email;
+    String password;
+    String memberType;
 
-    public static RegisteredMemberResponse of(MemberVo vo) {
-        return RegisteredMemberResponse.builder()
-                .memberId(vo.memberId())
-                .build();
-    }
 }

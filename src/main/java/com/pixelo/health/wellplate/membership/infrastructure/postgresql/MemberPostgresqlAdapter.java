@@ -5,6 +5,8 @@ import com.pixelo.health.wellplate.membership.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.function.Supplier;
+
 @Component
 @RequiredArgsConstructor
 public class MemberPostgresqlAdapter implements MemberOutputPort {
