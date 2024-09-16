@@ -56,7 +56,7 @@ class MemberCommandServiceTest {
         var resultMemberVo = memberCommandService.registerMemberCommand(command);
         //then
         Assertions.assertNotNull(resultMemberVo);
-        Assertions.assertEquals(expectedMemberVo, resultMemberVo);
+        Assertions.assertEquals(expectedMemberVo, resultMemberVo.memberVo());
 
         verify(memberOutputPort).save(Mockito.any(Member.class));
         verify(memberMapStruct).toMemberVo(Mockito.any(MemberProviderImpl.class));

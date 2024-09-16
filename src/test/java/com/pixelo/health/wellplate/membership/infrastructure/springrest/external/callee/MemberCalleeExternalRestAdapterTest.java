@@ -7,6 +7,7 @@ import com.pixelo.health.wellplate.core.rest.ControllerAdvice;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
 import com.pixelo.health.wellplate.membership.application.in.command.MemberInputPort;
 import com.pixelo.health.wellplate.membership.application.in.command.RegisterMemberCommand;
+import com.pixelo.health.wellplate.membership.application.vo.MemberShipVo;
 import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
 import com.pixelo.health.wellplate.membership.domain.MemberType;
 import com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee.request.RegisterMemberRequest;
@@ -60,13 +61,16 @@ class MemberCalleeExternalRestAdapterTest {
 
         var memberId = UUID.randomUUID();
         var memberVo = createMemberVo(memberId);
+        var memberShipVo = MemberShipVo.builder()
+                .memberVo(memberVo)
+                .build();
         var expectedResponse = createRegisteredMemberResponse(memberVo);
 
         // Mock 객체 동작 설정
         Mockito.when(memberRequestStruct.toRegisterMemberCommand(any(RegisterMemberRequest.class)))
                 .thenReturn(command);
         Mockito.when(memberInputPort.registerMemberCommand(any(RegisterMemberCommand.class)))
-                .thenReturn(memberVo);
+                .thenReturn(memberShipVo);
         Mockito.when(memberResponseStruct.toRegisteredMemberResponse(any(MemberVo.class)))
                 .thenReturn(expectedResponse);
 

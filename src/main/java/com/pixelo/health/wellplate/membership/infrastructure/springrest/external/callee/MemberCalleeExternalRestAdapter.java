@@ -24,15 +24,15 @@ public class MemberCalleeExternalRestAdapter {
     private final MemberRequestStruct memberRequestStruct;
 
     @PostMapping
-    @Operation(summary = "회원가입 - 일반 사용자")
+    @Operation(summary = "회원 생성 - 일반 사용자")
     public ResultResponse<RegisteredMemberResponse> registerMember(
             @RequestBody
             @Valid
             RegisterMemberRequest request
     ) {
         var command = memberRequestStruct.toRegisterMemberCommand(request);
-        var memberVo = memberInputPort.registerMemberCommand(command);
-        var response = memberResponseStruct.toRegisteredMemberResponse(memberVo);
+        var memberShipVo = memberInputPort.registerMemberCommand(command);
+        var response = memberResponseStruct.toRegisteredMemberResponse(memberShipVo.memberVo());
         return ResultResponse.ok(response);
     }
 }
