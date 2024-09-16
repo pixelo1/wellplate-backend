@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-@Schema(title = "회원가입 요청")
+@Schema(title = "일반 회원 생성 요청")
 public class RegisterMemberRequest {
     @Email
     @NotNull(message = "이메일은 필수입니다")

@@ -3,15 +3,18 @@ package com.pixelo.health.wellplate.membership.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @EqualsAndHashCode(of = {"memberId"}, callSuper = false)
 @Entity
 @NoArgsConstructor
 @Table(name = "member", schema = "wellplate")
-public class Member {
+public class Member implements UserDetails{
 
     @Id
     private UUID memberId;
@@ -44,5 +47,45 @@ public class Member {
     public String password() {return this.password;}
     public MemberType memberType() {
         return this.memberType;
+    }
+
+
+
+    /**
+     * authenticate를 위한 override
+     * */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return memberType.getAuthorities();
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

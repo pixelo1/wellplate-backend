@@ -14,8 +14,4 @@ public class WellPlateApplication {
         SpringApplication.run(WellPlateApplication.class, args);
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder () {
-        return new BCryptPasswordEncoder();
-    }
 }

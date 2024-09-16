@@ -5,8 +5,6 @@ import com.pixelo.health.wellplate.membership.domain.MemberType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MemberProviderImplTest {
 
     @Test
