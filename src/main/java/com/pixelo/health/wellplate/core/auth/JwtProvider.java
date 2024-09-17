@@ -3,14 +3,19 @@ package com.pixelo.health.wellplate.core.auth;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecureDigestAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,6 +63,7 @@ public class JwtProvider {
             UserDetails userDetails,
             long expiration
     ) {
+
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername()) //todo memberId가 있어야 하지 않을까?
@@ -97,7 +103,12 @@ public class JwtProvider {
         //interface 제공 random key 사용해보자 -
 //        return Jwts.SIG.HS256.key().build();
         //인코딩해둔 secretkey를 평문으로 사용하기 위함
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+        try {
+            //todo ref
+            byte[] digest = MessageDigest.getInstance("SHA-256").digest(secretKey.getBytes());
+            return Keys.hmacShaKeyFor(digest);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,7 +1,10 @@
 package com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee;
 
 import com.pixelo.health.wellplate.authentication.application.in.command.AuthenticationCommandInputPort;
+import com.pixelo.health.wellplate.authentication.application.in.command.RefreshTokenCommand;
+import com.pixelo.health.wellplate.authentication.application.vo.TokenVo;
 import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.request.AuthenticateMemberRequest;
+import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.request.RefreshTokenRequest;
 import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.request.RegisterTokenAndMemberRequest;
 import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.response.AuthenticationResponse;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
@@ -49,10 +52,13 @@ public class AuthenticationCalleeExternalRestAdapter {
 
     @PostMapping("/refresh-token")
     @Operation(summary = "토큰 재발급")
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
+    public ResultResponse<AuthenticationResponse> refreshToken(
+            @RequestBody
+            RefreshTokenRequest request
     ) {
-        authenticationCommandInputPort.refreshToken();
+        var command = authenticationRequestMapStruct.toRefreshTokenCommand(request);
+        var tokenVo = authenticationCommandInputPort.refreshToken(command);
+        var response = authenticationResponseMapStruct.toAuthenticationResponse(tokenVo);
+        return ResultResponse.ok(response);
     }
 }

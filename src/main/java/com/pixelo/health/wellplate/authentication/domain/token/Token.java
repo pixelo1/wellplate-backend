@@ -39,7 +39,7 @@ public class Token {
         this.expired = false;
     }
 
-    public void updateRevokeToken() {
+    public void updateTokenRevoke() {
         this.revoked = true;
         this.expired = true;
     }

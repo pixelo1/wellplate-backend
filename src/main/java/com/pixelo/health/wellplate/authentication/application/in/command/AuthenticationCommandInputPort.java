@@ -8,6 +8,6 @@ public interface AuthenticationCommandInputPort {
 
     TokenVo authenticateMember(AuthenticateMemberCommand command);
 
-    void refreshToken();
+    TokenVo refreshToken(RefreshTokenCommand command);
 
 }

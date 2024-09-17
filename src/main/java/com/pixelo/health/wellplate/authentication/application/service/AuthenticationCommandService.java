@@ -2,6 +2,7 @@ package com.pixelo.health.wellplate.authentication.application.service;
 
 import com.pixelo.health.wellplate.authentication.application.in.command.AuthenticateMemberCommand;
 import com.pixelo.health.wellplate.authentication.application.in.command.AuthenticationCommandInputPort;
+import com.pixelo.health.wellplate.authentication.application.in.command.RefreshTokenCommand;
 import com.pixelo.health.wellplate.authentication.application.in.command.RegisterTokenAndMemberCommand;
 import com.pixelo.health.wellplate.authentication.application.out.MemberShipOutputPort;
 import com.pixelo.health.wellplate.authentication.application.out.RegisterMemberRequest;
@@ -10,6 +11,7 @@ import com.pixelo.health.wellplate.authentication.application.out.TokenOutputPor
 import com.pixelo.health.wellplate.authentication.application.vo.TokenVo;
 import com.pixelo.health.wellplate.authentication.domain.token.Token;
 import com.pixelo.health.wellplate.core.auth.JwtProvider;
+import com.pixelo.health.wellplate.core.auth.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -78,12 +80,24 @@ public class AuthenticationCommandService implements AuthenticationCommandInputP
         var validMemberTokens = tokenOutputPort.findAllValidTokenByMemberId(userDetails.memberId());
         if (validMemberTokens.isEmpty())
             return;
-        validMemberTokens.forEach(Token::updateRevokeToken);
+        validMemberTokens.forEach(Token::updateTokenRevoke);
         tokenOutputPort.saveAll(validMemberTokens);
     }
 
     @Override
-    public void refreshToken() {
-
+    public TokenVo refreshToken(RefreshTokenCommand command) {
+        var refreshToken = command.refreshToken();
+        if (jwtProvider.isTokenExpired(refreshToken)) {
+            throw new TokenExpiredException();
+        }
+        var userEmail = jwtProvider.extractUsername(refreshToken);
+        var userDetailsResponse = memberShipOutputPort.findMemberByEmail(userEmail);
+        var accessToken = jwtProvider.generateToken(userDetailsResponse);
+        revokeAllUserTokens(userDetailsResponse);
+        saveUserToken(userDetailsResponse.memberId(), accessToken);
+        return TokenVo.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }
