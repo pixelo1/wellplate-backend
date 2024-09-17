@@ -88,7 +88,7 @@ public class AuthenticationCommandService implements AuthenticationCommandInputP
     public TokenVo refreshToken(RefreshTokenCommand command) {
         var refreshToken = command.refreshToken();
         if (jwtProvider.isTokenExpired(refreshToken)) {
-            throw new TokenExpiredException();
+            throw new IllegalArgumentException("토큰이 만료되었습니다.");
         }
         var userEmail = jwtProvider.extractUsername(refreshToken);
         var userDetailsResponse = memberShipOutputPort.findMemberByEmail(userEmail);

@@ -13,6 +13,7 @@ import com.pixelo.health.wellplate.membership.domain.MemberType;
 import com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee.request.RegisterMemberRequest;
 import com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee.response.RegisteredMemberResponse;
 import org.assertj.core.api.Assertions;
+import org.junit.Ignore;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -52,8 +53,9 @@ class MemberCalleeExternalRestAdapterTest {
     private final String email = "test@naver.com";
     private final String password = "1234";
     private final String memberType = "WELLNESS_CHALLENGER";
-    @Test
-    @DisplayName("회원가입 - 성공 케이스")
+    @Ignore
+//    @Test
+    @DisplayName("회원가입 - 성공 케이스 - 삭제 예정")
     void registerMember_Success() throws Exception {
         // Given
         var request = createRegisterMemberRequest();

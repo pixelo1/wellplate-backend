@@ -1,9 +1,10 @@
 package com.pixelo.health.wellplate.core.filter;
 
-import com.pixelo.health.wellplate.authentication.infrastructure.TokenFacade;
+import com.pixelo.health.wellplate.authentication.spi.TokenFacade;
 import com.pixelo.health.wellplate.core.auth.JwtProvider;
 import com.pixelo.health.wellplate.core.auth.TokenExpiredException;
 import com.pixelo.health.wellplate.core.auth.UserService;
+import com.pixelo.health.wellplate.core.spi.TokenFacadeInCore;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
     private final UserService userService;
-    private final TokenFacade tokenFacade;
+    private final TokenFacadeInCore tokenFacadeInCore;
     private final static String HEADER_AUTHORIZATION = "Authorization";
     private final static String TOKEN_PREFIX = "Bearer ";
     private final static String EXCLUDE_PATH = "/api/v1/auth";
@@ -67,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (jwtProvider.isTokenExpired(jwtToken)) {
             throw new TokenExpiredException();
         }
-        var validatedToken = tokenFacade.validateToken(jwtToken);
+        var validatedToken = tokenFacadeInCore.validateToken(jwtToken);
         if (!validatedToken) {
             throw new TokenExpiredException();
         }

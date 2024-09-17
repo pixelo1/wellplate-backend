@@ -1,7 +1,7 @@
 package com.pixelo.health.wellplate.authentication.infrastructure.springrest.internal.callee;
 
-import com.pixelo.health.wellplate.authentication.application.in.query.AuthenticationQueryInputPort;
-import com.pixelo.health.wellplate.authentication.infrastructure.TokenFacade;
+import com.pixelo.health.wellplate.authentication.spi.TokenFacade;
+import com.pixelo.health.wellplate.authentication.application.in.query.TokenQueryInputPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class TokenCalleeInternalRestAdapter implements TokenFacade {
 
-    private final AuthenticationQueryInputPort authenticationQueryInputPort;
+    private final TokenQueryInputPort tokenQueryInputPort;
 
     @Override
     public Boolean validateToken(String token) {
-        return authenticationQueryInputPort.tokenIsValid(token);
+        return tokenQueryInputPort.tokenIsValid(token);
     }
 }
