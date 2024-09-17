@@ -69,6 +69,9 @@ public class Member implements UserDetails{
         return email;
     }
 
+    /**
+     * 계정 탈퇴, 비밀번호 변경, 휴면, 락 등 정책을 추가해주면 된다
+     * */
     @Override
     public boolean isAccountNonExpired() {
         return true;

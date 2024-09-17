@@ -1,6 +1,7 @@
 package com.pixelo.health.wellplate.core.auth;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -59,20 +60,24 @@ public class JwtProvider {
     ) {
         return Jwts.builder()
                 .claims(extraClaims)
-                .subject(userDetails.getUsername())
+                .subject(userDetails.getUsername()) //todo memberId가 있어야 하지 않을까?
                 .issuedAt(DateProvider.currentTimeMillis())
                 .expiration(DateProvider.currentTimeMillisPlusMillis(expiration))
                 .signWith(getSignInKey())
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-    }
+//    public boolean isTokenUserNameValid(String token, UserDetails userDetails) {
+//        final String username = extractUsername(token);
+//        return username.equals(userDetails.getUsername());
+//    }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    public boolean isTokenExpired(String token) {
+        try {
+            return extractExpiration(token).before(new Date());
+        } catch (ExpiredJwtException e) {
+            return true;
+        }
     }
 
     private Date extractExpiration(String token) {

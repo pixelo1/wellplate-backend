@@ -3,6 +3,7 @@ package com.pixelo.health.wellplate.membership.application.service;
 import com.pixelo.health.wellplate.membership.application.in.command.MemberInputPort;
 import com.pixelo.health.wellplate.membership.application.in.command.RegisterMemberCommand;
 import com.pixelo.health.wellplate.membership.application.vo.MemberShipVo;
+import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
 import com.pixelo.health.wellplate.membership.application.vo.UserDetailVo;
 import com.pixelo.health.wellplate.membership.domain.provider.MemberProviderImpl;
 import com.pixelo.health.wellplate.membership.application.out.MemberOutputPort;
@@ -29,10 +30,22 @@ public class MemberCommandService implements MemberInputPort {
         var savedMember = MemberProviderImpl.from(memberOutputPort.save(member));
         var memberVo = memberMapStruct.toMemberVo(savedMember);
         var userDetailVo = createUserDetailVo(savedMember);
+        return createMemberShipVo(memberVo, userDetailVo);
+    }
+
+    private static MemberShipVo createMemberShipVo(MemberVo memberVo, UserDetailVo userDetailVo) {
         return MemberShipVo.builder()
                 .memberVo(memberVo)
                 .userDetailVo(userDetailVo)
                 .build();
+    }
+
+    @Override
+    public MemberShipVo findMemberByEmail(String email) {
+        var savedMember = MemberProviderImpl.from(memberOutputPort.findMemberByEmail(email));
+        var memberVo = memberMapStruct.toMemberVo(savedMember);
+        var userDetailVo = createUserDetailVo(savedMember);
+        return createMemberShipVo(memberVo, userDetailVo);
     }
 
     private static UserDetailVo createUserDetailVo(MemberProviderImpl savedMember) {
@@ -46,4 +59,5 @@ public class MemberCommandService implements MemberInputPort {
                 .authorities(savedMember.getAuthorities())
                 .build();
     }
+
 }

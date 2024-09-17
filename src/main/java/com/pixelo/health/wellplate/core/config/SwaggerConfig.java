@@ -26,14 +26,15 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-//        SecurityScheme securityScheme = new SecurityScheme()
-//                .type(SecurityScheme.Type.HTTP)
-//                .scheme("bearer")
-//                .bearerFormat("JWT")
-//                .description("Bearer 를 제외한 토큰")
-//                .in(SecurityScheme.In.HEADER)
-//                .name("Authorization");
-//        SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
+        var securityScheme = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT")
+                .description("Bearer 를 제외한 토큰")
+                .in(SecurityScheme.In.HEADER)
+                .name("Authorization");
+
+        var securityRequirement = new SecurityRequirement().addList("bearerAuth");
 
         return new OpenAPI()
                 .info(new io.swagger.v3.oas.models.info.Info().title(TITLE)
@@ -43,8 +44,7 @@ public class SwaggerConfig {
                 .externalDocs(new ExternalDocumentation()
                         .description(DESCRIPTION)
                         .url(URL))
-//                .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
-                .components(new Components());
-//                .security(List.of(securityRequirement));
+                .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
+                .security(List.of(securityRequirement));
     }
 }

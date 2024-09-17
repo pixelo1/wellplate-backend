@@ -1,6 +1,9 @@
 package com.pixelo.health.wellplate.membership;
 
+import com.pixelo.health.wellplate.core.spi.ResultResponse;
+
 public interface MemberFacade {
 
-    MemberShipFacadeVo registerMember(RegisterMemberFacadeCommand command);
+    ResultResponse<MemberShipFacadeVo> registerMember(RegisterMemberFacadeCommand command);
+    ResultResponse<MemberShipFacadeVo> findMemberByEmail(String email);
 }

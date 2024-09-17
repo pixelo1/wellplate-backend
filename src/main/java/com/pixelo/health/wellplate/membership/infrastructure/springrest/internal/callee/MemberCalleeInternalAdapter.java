@@ -1,5 +1,6 @@
 package com.pixelo.health.wellplate.membership.infrastructure.springrest.internal.callee;
 
+import com.pixelo.health.wellplate.core.spi.ResultResponse;
 import com.pixelo.health.wellplate.membership.MemberFacade;
 import com.pixelo.health.wellplate.membership.MemberShipFacadeVo;
 import com.pixelo.health.wellplate.membership.RegisterMemberFacadeCommand;
@@ -18,12 +19,20 @@ public class MemberCalleeInternalAdapter implements MemberFacade {
     private final MemberFacadeMapStruct memberFacadeMapStruct;
 
     @Override
-    public MemberShipFacadeVo registerMember(RegisterMemberFacadeCommand commandFacade) {
+    public ResultResponse<MemberShipFacadeVo> registerMember(RegisterMemberFacadeCommand commandFacade) {
         var command = RegisterMemberCommand.builder()
                 .email(commandFacade.email())
                 .password(commandFacade.password())
                 .build();
-        MemberShipVo memberShipVo = memberInputPort.registerMemberCommand(command);
-        return memberFacadeMapStruct.toMemberShipFacadeVo(memberShipVo);
+        var memberShipVo = memberInputPort.registerMemberCommand(command);
+        var memberShipFacadeVo = memberFacadeMapStruct.toMemberShipFacadeVo(memberShipVo);
+        return ResultResponse.ok(memberShipFacadeVo);
+    }
+
+    @Override
+    public ResultResponse<MemberShipFacadeVo> findMemberByEmail(String email) {
+        var memberShipVo = memberInputPort.findMemberByEmail(email);
+        var memberShipFacadeVo = memberFacadeMapStruct.toMemberShipFacadeVo(memberShipVo);
+        return ResultResponse.ok(memberShipFacadeVo);
     }
 }

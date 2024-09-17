@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class MemberPostgresqlAdapter implements MemberOutputPort, UserService {
@@ -32,9 +34,20 @@ public class MemberPostgresqlAdapter implements MemberOutputPort, UserService {
     }
 
     @Override
+    public Member findMemberByEmail(String email) {
+        return memberPostgresqlRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
+    }
+
+    /**
+     * Security
+     * */
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         var memberOptional = memberPostgresqlRepository.findByEmail(email);
         return memberOptional.map(MemberPostgresqlAdapter::apply)
-                .orElseThrow(() -> new UsernameNotFoundException("유저가 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저가 없습니다."));
     }
+
+
 }
