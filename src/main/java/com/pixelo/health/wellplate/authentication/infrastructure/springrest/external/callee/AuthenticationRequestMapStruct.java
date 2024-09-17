@@ -1,8 +1,10 @@
 package com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee;
 
 import com.pixelo.health.wellplate.authentication.application.in.command.AuthenticateMemberCommand;
+import com.pixelo.health.wellplate.authentication.application.in.command.RefreshTokenCommand;
 import com.pixelo.health.wellplate.authentication.application.in.command.RegisterTokenAndMemberCommand;
 import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.request.AuthenticateMemberRequest;
+import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.request.RefreshTokenRequest;
 import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.request.RegisterTokenAndMemberRequest;
 import org.mapstruct.Mapper;
 
@@ -10,4 +12,5 @@ import org.mapstruct.Mapper;
 public interface AuthenticationRequestMapStruct {
     RegisterTokenAndMemberCommand toRegisterTokenAndMemberCommand(RegisterTokenAndMemberRequest request);
     AuthenticateMemberCommand toAuthenticateMemberCommand(AuthenticateMemberRequest request);
+    RefreshTokenCommand toRefreshTokenCommand(RefreshTokenRequest request);
 }
