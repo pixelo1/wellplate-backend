@@ -64,7 +64,7 @@ public class ControllerAdvice {
     }
 
     private void logErrorMessage(HttpServletRequest request, Exception e, boolean printStackTrace) {
-//        var userId = pmsAuthUserContext.userId();
+//        var userId = authUserContext.userId();
 //        var errorMessage = "[UserID:" + userId + " ABOUT_REQ: "+ request.getMethod() +" "+ request.getRequestURI() +"]: " + e.getMessage();
         var errorMessage = "[ABOUT_REQ: "+ request.getMethod() +" "+ request.getRequestURI() +"]: " + e.getMessage();
         if (activeProfileProvider.isLocal() || printStackTrace) {

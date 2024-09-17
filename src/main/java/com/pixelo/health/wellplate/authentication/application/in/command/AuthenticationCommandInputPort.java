@@ -2,11 +2,12 @@ package com.pixelo.health.wellplate.authentication.application.in.command;
 
 import com.pixelo.health.wellplate.authentication.application.vo.TokenVo;
 
-public interface AuthenticationInputPort {
+public interface AuthenticationCommandInputPort {
 
     TokenVo registerTokenAndMember(RegisterTokenAndMemberCommand command);
 
-    void authenticateMember(AuthenticateMemberCommand command);
+    TokenVo authenticateMember(AuthenticateMemberCommand command);
 
     void refreshToken();
+
 }

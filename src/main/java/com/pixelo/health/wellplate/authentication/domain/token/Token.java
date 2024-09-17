@@ -38,4 +38,17 @@ public class Token {
         this.revoked = false;
         this.expired = false;
     }
+
+    public void updateRevokeToken() {
+        this.revoked = true;
+        this.expired = true;
+    }
+
+    public Boolean validaToken() {
+        return !notValidToken();
+    }
+
+    private Boolean notValidToken() {
+        return this.revoked || this.expired;
+    }
 }

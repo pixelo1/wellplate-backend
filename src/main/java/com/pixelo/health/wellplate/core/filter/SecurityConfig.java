@@ -1,23 +1,40 @@
 package com.pixelo.health.wellplate.core.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pixelo.health.wellplate.core.auth.JwtProvider;
+import com.pixelo.health.wellplate.core.auth.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+/**
+ * Security start
+ * authenticationManager - 매니저 빈 등록 - 인증 핵심 상위 개체 - 여러 authenticationProvider를 갖을수 있다
+ * userDetailsService - userDetailsService 상속받아 회원 쪽에서 구현해둠
+ * passwordEncoder - 매니저 인증 password 비교시 사용
+ * authenticationProvider - 인증 실제 구현체
+ * -- DaoAuthenticationProvider - db접근을 통한 인증 로직
+ *
+ * 이렇게 빈으로 노출할경우 springSecurity에서 사용하는 인증 로직을
+ * 서비스 레이어에서 그대로 재사용, 일관성 유지 가능
+ * */
 
 @Slf4j
 @Configuration
@@ -25,43 +42,31 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final AuthenticationProvider AuthenticationProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     private static final String[] WHITE_LIST_URL = {
             "/actuator/**",
             "/h2-console/**",
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
-            "/auth/**"};
+            "/api/v1/auth/**"};
 
-    private final Environment env;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        var authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-//        authenticationManagerBuilder
-//                .userDetailsService(userService)
-//                .passwordEncoder(bCryptPasswordEncoder); // 회원 정보
-        var authenticationManager = authenticationManagerBuilder.build();
-
-        http.csrf(AbstractHttpConfigurer::disable);
-
-        http.authorizeHttpRequests((authz) -> authz
-//                                .requestMatchers(new AntPathRequestMatcher("/actuator/**")).permitAll()
-//                                .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
-//                                .requestMatchers(new AntPathRequestMatcher("/members", "POST")).permitAll()
-//                                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll() // swagger
-//                                .requestMatchers(new AntPathRequestMatcher("/swagger-resources/**")).permitAll() //swagger
-//                                .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll() //swagger
-
+        http.httpBasic(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((authz) -> authz
                                 .requestMatchers(WHITE_LIST_URL).permitAll()
-                                .requestMatchers(HttpMethod.POST,"/members").permitAll()
-
-//                                .access(new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasIpAddress('192.168.1.2')")) // host pc ip address
+                                .requestMatchers(HttpMethod.POST,"/api/v1/members").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )
-                .authenticationManager(authenticationManager)
+                .authenticationProvider(AuthenticationProvider) //security에서 AuthenticationManager를 자동 생성하여 사용한다
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .formLogin(AbstractHttpConfigurer::disable);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

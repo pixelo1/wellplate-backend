@@ -8,6 +8,7 @@ import com.pixelo.health.wellplate.membership.MemberShipFacadeVo;
 import com.pixelo.health.wellplate.membership.RegisterMemberFacadeCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,7 +22,24 @@ public class MemberShipCallerInternalRestAdapter implements MemberShipOutputPort
                 .email(command.email())
                 .password(command.password())
                 .build();
-        MemberShipFacadeVo memberShipFacadeVo = memberFacade.registerMember(commandFacade);
+        var memberShipFacadeVoResultResponse = memberFacade.registerMember(commandFacade);
+        if (ObjectUtils.isEmpty(memberShipFacadeVoResultResponse.data())) {
+            throw new IllegalArgumentException("회원 등록중 실패했습니다. email: " + command.email());
+        }
+        return createUserDetailsResponse(memberShipFacadeVoResultResponse.data());
+    }
+
+    @Override
+    public RegisteredUserDetailsResponse findMemberByEmail(String email) {
+        var memberShipFacadeVoResultResponse = memberFacade.findMemberByEmail(email);
+
+        if (ObjectUtils.isEmpty(memberShipFacadeVoResultResponse.data())) {
+            throw new IllegalArgumentException("회원을 조회하지 못했습니다. email: " + email);
+        }
+        return createUserDetailsResponse(memberShipFacadeVoResultResponse.data());
+    }
+
+    private static RegisteredUserDetailsResponse createUserDetailsResponse(MemberShipFacadeVo memberShipFacadeVo) {
         return RegisteredUserDetailsResponse.builder()
                 .memberId(memberShipFacadeVo.memberVo().memberId())
                 .password(memberShipFacadeVo.userDetailVo().password())

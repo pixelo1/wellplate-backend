@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.UUID;
 
+//todo domain으로 넣어야 할듯?
 @Builder
 public record RegisteredUserDetailsResponse(
         UUID memberId,

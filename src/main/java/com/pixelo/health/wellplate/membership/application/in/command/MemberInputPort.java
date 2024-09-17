@@ -6,4 +6,5 @@ import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
 public interface MemberInputPort {
 
     MemberShipVo registerMemberCommand(RegisterMemberCommand command);
+    MemberShipVo findMemberByEmail(String email);
 }

@@ -1,16 +1,18 @@
 package com.pixelo.health.wellplate.authentication.application.service;
 
 import com.pixelo.health.wellplate.authentication.application.in.command.AuthenticateMemberCommand;
-import com.pixelo.health.wellplate.authentication.application.in.command.AuthenticationInputPort;
+import com.pixelo.health.wellplate.authentication.application.in.command.AuthenticationCommandInputPort;
 import com.pixelo.health.wellplate.authentication.application.in.command.RegisterTokenAndMemberCommand;
 import com.pixelo.health.wellplate.authentication.application.out.MemberShipOutputPort;
 import com.pixelo.health.wellplate.authentication.application.out.RegisterMemberRequest;
+import com.pixelo.health.wellplate.authentication.application.out.RegisteredUserDetailsResponse;
 import com.pixelo.health.wellplate.authentication.application.out.TokenOutputPort;
 import com.pixelo.health.wellplate.authentication.application.vo.TokenVo;
 import com.pixelo.health.wellplate.authentication.domain.token.Token;
 import com.pixelo.health.wellplate.core.auth.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class AuthenticationCommandService implements AuthenticationInputPort {
+public class AuthenticationCommandService implements AuthenticationCommandInputPort {
 
     private final MemberShipOutputPort memberShipOutputPort;
     private final TokenOutputPort tokenOutputPort;
@@ -52,9 +54,32 @@ public class AuthenticationCommandService implements AuthenticationInputPort {
         tokenOutputPort.save(token);
     }
 
-    @Override
-    public void authenticateMember(AuthenticateMemberCommand command) {
 
+    @Override
+    public TokenVo authenticateMember(AuthenticateMemberCommand command) {
+        //security에서 처리 후 들어온다
+        var authenticationToken = new UsernamePasswordAuthenticationToken(command.email(), command.password());
+        authenticationManager.authenticate(authenticationToken); // springSecurity의 인증 처리로직 그대로 사용함
+        // security context 에서 가져올수 있지 않을까?
+
+        var userDetailsResponse = memberShipOutputPort.findMemberByEmail(command.email());
+        var jwtToken = jwtProvider.generateToken(userDetailsResponse);
+        var refreshToken = jwtProvider.generateRefreshToken(userDetailsResponse);
+
+        revokeAllUserTokens(userDetailsResponse);
+        saveUserToken(userDetailsResponse.memberId(), jwtToken);
+        return TokenVo.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    private void revokeAllUserTokens(RegisteredUserDetailsResponse userDetails) {
+        var validMemberTokens = tokenOutputPort.findAllValidTokenByMemberId(userDetails.memberId());
+        if (validMemberTokens.isEmpty())
+            return;
+        validMemberTokens.forEach(Token::updateRevokeToken);
+        tokenOutputPort.saveAll(validMemberTokens);
     }
 
     @Override
