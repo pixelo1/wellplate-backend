@@ -1,13 +1,10 @@
 package com.pixelo.health.wellplate.core.auth;
 
+import com.pixelo.health.wellplate.core.spi.JwtUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecureDigestAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -19,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 //todo 인터페이스 제공으로 변경 필요
@@ -32,8 +30,9 @@ public class JwtProvider {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public UUID extractMemberId(String token) {
+        String stringMemberId = extractClaim(token, Claims::getSubject);
+        return UUID.fromString(stringMemberId);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -41,32 +40,27 @@ public class JwtProvider {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public <T extends UserDetails> String generateToken(T userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    private String generateToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
-    ) {
+    private <T extends UserDetails> String generateToken(Map<String, Object> extraClaims, T userDetails) {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
-    public String generateRefreshToken(
-            UserDetails userDetails
-    ) {
+    public <T extends UserDetails> String generateRefreshToken(T userDetails) {
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
-    private String buildToken(
+    private <T extends UserDetails> String buildToken(
             Map<String, Object> extraClaims,
-            UserDetails userDetails,
+            T userDetails,
             long expiration
     ) {
-
+        var jwtUserDetails = (JwtUserDetails) userDetails;
         return Jwts.builder()
                 .claims(extraClaims)
-                .subject(userDetails.getUsername()) //todo memberId가 있어야 하지 않을까?
+                .subject(String.valueOf(jwtUserDetails.memberId())) //todo memberId가 있어야 하지 않을까?
                 .issuedAt(DateProvider.currentTimeMillis())
                 .expiration(DateProvider.currentTimeMillisPlusMillis(expiration))
                 .signWith(getSignInKey())

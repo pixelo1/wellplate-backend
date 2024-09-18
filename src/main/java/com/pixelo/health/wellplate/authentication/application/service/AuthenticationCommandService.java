@@ -11,7 +11,7 @@ import com.pixelo.health.wellplate.authentication.application.out.TokenOutputPor
 import com.pixelo.health.wellplate.authentication.application.vo.TokenVo;
 import com.pixelo.health.wellplate.authentication.domain.token.Token;
 import com.pixelo.health.wellplate.core.auth.JwtProvider;
-import com.pixelo.health.wellplate.core.auth.TokenExpiredException;
+import com.pixelo.health.wellplate.core.spi.JwtUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,9 +38,9 @@ public class AuthenticationCommandService implements AuthenticationCommandInputP
                 .password(passwordEncoder.encode(command.password()))
                 .build();
         var registeredUserDetailsResponse = memberShipOutputPort.registerMemberCommand(registerMemberCommand);
-
-        var jwtToken = jwtProvider.generateToken(registeredUserDetailsResponse);
-        var refreshToken = jwtProvider.generateRefreshToken(registeredUserDetailsResponse);
+        var jwtUserDetails = toJwtUserDetails(registeredUserDetailsResponse);
+        var jwtToken = jwtProvider.generateToken(jwtUserDetails);
+        var refreshToken = jwtProvider.generateRefreshToken(jwtUserDetails);
         saveUserToken(registeredUserDetailsResponse.memberId(), jwtToken);
         return TokenVo.builder()
                 .accessToken(jwtToken)
@@ -62,22 +62,22 @@ public class AuthenticationCommandService implements AuthenticationCommandInputP
         //security에서 처리 후 들어온다
         var authenticationToken = new UsernamePasswordAuthenticationToken(command.email(), command.password());
         authenticationManager.authenticate(authenticationToken); // springSecurity의 인증 처리로직 그대로 사용함
-        // security context 에서 가져올수 있지 않을까?
 
-        var userDetailsResponse = memberShipOutputPort.findMemberByEmail(command.email());
-        var jwtToken = jwtProvider.generateToken(userDetailsResponse);
-        var refreshToken = jwtProvider.generateRefreshToken(userDetailsResponse);
+        var registeredUserDetailsResponse = memberShipOutputPort.findMemberByEmail(command.email());
+        var jwtUserDetails = toJwtUserDetails(registeredUserDetailsResponse);
+        var jwtToken = jwtProvider.generateToken(jwtUserDetails);
+        var refreshToken = jwtProvider.generateRefreshToken(jwtUserDetails);
 
-        revokeAllUserTokens(userDetailsResponse);
-        saveUserToken(userDetailsResponse.memberId(), jwtToken);
+        revokeAllUserTokens(jwtUserDetails);
+        saveUserToken(jwtUserDetails.memberId(), jwtToken);
         return TokenVo.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
     }
 
-    private void revokeAllUserTokens(RegisteredUserDetailsResponse userDetails) {
-        var validMemberTokens = tokenOutputPort.findAllValidTokenByMemberId(userDetails.memberId());
+    private void revokeAllUserTokens(JwtUserDetails jwtUserDetails) {
+        var validMemberTokens = tokenOutputPort.findAllValidTokenByMemberId(jwtUserDetails.memberId());
         if (validMemberTokens.isEmpty())
             return;
         validMemberTokens.forEach(Token::updateTokenRevoke);
@@ -90,14 +90,28 @@ public class AuthenticationCommandService implements AuthenticationCommandInputP
         if (jwtProvider.isTokenExpired(refreshToken)) {
             throw new IllegalArgumentException("토큰이 만료되었습니다.");
         }
-        var userEmail = jwtProvider.extractUsername(refreshToken);
-        var userDetailsResponse = memberShipOutputPort.findMemberByEmail(userEmail);
-        var accessToken = jwtProvider.generateToken(userDetailsResponse);
-        revokeAllUserTokens(userDetailsResponse);
-        saveUserToken(userDetailsResponse.memberId(), accessToken);
+        var memberId = jwtProvider.extractMemberId(refreshToken);
+        var registeredUserDetailsResponse = memberShipOutputPort.findMemberByMemberId(memberId);
+        var jwtUserDetails = toJwtUserDetails(registeredUserDetailsResponse);
+        var accessToken = jwtProvider.generateToken(jwtUserDetails);
+        revokeAllUserTokens(jwtUserDetails);
+        saveUserToken(jwtUserDetails.memberId(), accessToken);
         return TokenVo.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .build();
+    }
+
+    private JwtUserDetails toJwtUserDetails(RegisteredUserDetailsResponse response) {
+        return JwtUserDetails.builder()
+                .memberId(response.memberId())
+                .password(response.password())
+                .username(response.username())
+                .accountNonExpired(response.accountNonExpired())
+                .accountNonLocked(response.accountNonLocked())
+                .credentialsNonExpired(response.credentialsNonExpired())
+                .enabled(response.enabled())
+                .authorities(response.authorities())
                 .build();
     }
 }

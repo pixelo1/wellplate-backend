@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 
+import java.util.UUID;
+
 @Controller
 @RequiredArgsConstructor
 public class MemberShipCallerInternalRestAdapter implements MemberShipOutputPort {
@@ -35,6 +37,16 @@ public class MemberShipCallerInternalRestAdapter implements MemberShipOutputPort
 
         if (ObjectUtils.isEmpty(memberShipFacadeVoResultResponse.data())) {
             throw new IllegalArgumentException("회원을 조회하지 못했습니다. email: " + email);
+        }
+        return createUserDetailsResponse(memberShipFacadeVoResultResponse.data());
+    }
+
+    @Override
+    public RegisteredUserDetailsResponse findMemberByMemberId(UUID memberId) {
+        var memberShipFacadeVoResultResponse = memberFacade.findMemberById(memberId);
+
+        if (ObjectUtils.isEmpty(memberShipFacadeVoResultResponse.data())) {
+            throw new IllegalArgumentException("회원을 조회하지 못했습니다. memberId: " + memberId);
         }
         return createUserDetailsResponse(memberShipFacadeVoResultResponse.data());
     }

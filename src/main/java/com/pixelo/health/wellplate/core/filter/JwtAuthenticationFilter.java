@@ -1,9 +1,10 @@
 package com.pixelo.health.wellplate.core.filter;
 
-import com.pixelo.health.wellplate.authentication.spi.TokenFacade;
 import com.pixelo.health.wellplate.core.auth.JwtProvider;
 import com.pixelo.health.wellplate.core.auth.TokenExpiredException;
-import com.pixelo.health.wellplate.core.auth.UserService;
+import com.pixelo.health.wellplate.core.spi.AuthUser;
+import com.pixelo.health.wellplate.core.spi.JwtUserDetails;
+import com.pixelo.health.wellplate.core.spi.UserService;
 import com.pixelo.health.wellplate.core.spi.TokenFacadeInCore;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -48,11 +50,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         tokenValidation(jwtToken);
 
-        var userEmail = jwtProvider.extractUsername(jwtToken);
-        var userDetails = userService.loadUserByUsername(userEmail);
+        var memberId = jwtProvider.extractMemberId(jwtToken);
+        var jwtUserDetails = userService.findUserById(memberId); // todo 토큰에 권한까지 넣어서 제거하자
 
         //UsernamePasswordAuthenticationToken 생성되면서 isAuthenticated true로 들어간다
-        var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        //authUser
+        AuthUser authUser = AuthUser.builder()
+                .memberId(memberId)
+                .build();
+        var authenticationToken = new UsernamePasswordAuthenticationToken(authUser, jwtToken, jwtUserDetails.getAuthorities());
         var webAuthenticationDetails = new WebAuthenticationDetailsSource().buildDetails(request);
         authenticationToken.setDetails(webAuthenticationDetails);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
