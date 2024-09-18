@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.UUID;
 
-//todo domain으로 넣어야 할듯?
 @Builder
 public record RegisteredUserDetailsResponse(
         UUID memberId,
@@ -18,40 +17,5 @@ public record RegisteredUserDetailsResponse(
         boolean credentialsNonExpired,
         boolean enabled,
         Collection<? extends GrantedAuthority> authorities
-) implements UserDetails {
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
+) {
 }

@@ -1,5 +1,6 @@
 package com.pixelo.health.wellplate.core.rest;
 
+import com.pixelo.health.wellplate.core.auth.AuthUserContext;
 import com.pixelo.health.wellplate.core.profile.ActiveProfileProvider;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ControllerAdvice {
     private final ActiveProfileProvider activeProfileProvider;
+    private final AuthUserContext authUserContext;
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentNotValidException.class})
@@ -64,9 +66,9 @@ public class ControllerAdvice {
     }
 
     private void logErrorMessage(HttpServletRequest request, Exception e, boolean printStackTrace) {
-//        var userId = authUserContext.userId();
-//        var errorMessage = "[UserID:" + userId + " ABOUT_REQ: "+ request.getMethod() +" "+ request.getRequestURI() +"]: " + e.getMessage();
-        var errorMessage = "[ABOUT_REQ: "+ request.getMethod() +" "+ request.getRequestURI() +"]: " + e.getMessage();
+        var userId = authUserContext.userId();
+        var errorMessage = "[UserID:" + userId + " ABOUT_REQ: "+ request.getMethod() +" "+ request.getRequestURI() +"]: " + e.getMessage();
+//        var errorMessage = " ABOUT_REQ: "+ request.getMethod() +" "+ request.getRequestURI() +"]: " + e.getMessage();
         if (activeProfileProvider.isLocal() || printStackTrace) {
             log.error(errorMessage, e);
             return;

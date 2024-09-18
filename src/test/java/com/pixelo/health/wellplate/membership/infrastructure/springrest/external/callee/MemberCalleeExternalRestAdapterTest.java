@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pixelo.health.wellplate.core.filter.SecurityConfig;
 import com.pixelo.health.wellplate.core.rest.ControllerAdvice;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
-import com.pixelo.health.wellplate.membership.application.in.command.MemberInputPort;
+import com.pixelo.health.wellplate.membership.application.in.command.MemberCommandInputPort;
 import com.pixelo.health.wellplate.membership.application.in.command.RegisterMemberCommand;
 import com.pixelo.health.wellplate.membership.application.vo.MemberShipVo;
 import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
@@ -15,7 +15,6 @@ import com.pixelo.health.wellplate.membership.infrastructure.springrest.external
 import org.assertj.core.api.Assertions;
 import org.junit.Ignore;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -42,7 +41,7 @@ class MemberCalleeExternalRestAdapterTest {
     @MockBean
     private ControllerAdvice controllerAdvice;
     @MockBean
-    private MemberInputPort memberInputPort;
+    private MemberCommandInputPort memberCommandInputPort;
     @MockBean
     private MemberResponseStruct memberResponseStruct;
     @MockBean
@@ -71,7 +70,7 @@ class MemberCalleeExternalRestAdapterTest {
         // Mock 객체 동작 설정
         Mockito.when(memberRequestStruct.toRegisterMemberCommand(any(RegisterMemberRequest.class)))
                 .thenReturn(command);
-        Mockito.when(memberInputPort.registerMemberCommand(any(RegisterMemberCommand.class)))
+        Mockito.when(memberCommandInputPort.registerMemberCommand(any(RegisterMemberCommand.class)))
                 .thenReturn(memberShipVo);
         Mockito.when(memberResponseStruct.toRegisteredMemberResponse(any(MemberVo.class)))
                 .thenReturn(expectedResponse);
@@ -97,7 +96,7 @@ class MemberCalleeExternalRestAdapterTest {
 
         // Mock 객체 메서드 호출 검증
         verify(memberRequestStruct).toRegisterMemberCommand(any(RegisterMemberRequest.class));
-        verify(memberInputPort).registerMemberCommand(any(RegisterMemberCommand.class));
+        verify(memberCommandInputPort).registerMemberCommand(any(RegisterMemberCommand.class));
         verify(memberResponseStruct).toRegisteredMemberResponse(any(MemberVo.class));
     }
 
