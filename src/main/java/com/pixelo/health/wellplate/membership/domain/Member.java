@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
 import java.util.Collection;
 import java.util.UUID;
 
-@EqualsAndHashCode(of = {"wellnessChallengerId"}, callSuper = false)
+@EqualsAndHashCode(of = {"memberId"}, callSuper = false)
 @Entity
 @NoArgsConstructor
 @Table(name = "member", schema = "wellplate")
