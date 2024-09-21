@@ -1,4 +1,4 @@
-package com.pixelo.health.wellplate.health.infrastructure.springrest.external.callee.health.request;
+package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

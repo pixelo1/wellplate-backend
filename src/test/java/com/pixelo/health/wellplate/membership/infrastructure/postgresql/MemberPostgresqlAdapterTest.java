@@ -9,27 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(MemberPostgresqlAdapter.class)
 class MemberPostgresqlAdapterTest {
 
-    @Container
-    private static final PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:16.3")
-            .withDatabaseName("testdb")
-            .withUsername("user")
-            .withPassword("1234");
-
     @Autowired
     private MemberPostgresqlAdapter memberPostgresqlAdapter;
 
     @Test
-    @DisplayName("회원 생성 테스트")
+    @DisplayName("회원 생성 테스트123")
     void save_Member() {
         String email = "test@naver.com";
         String password = "1234";

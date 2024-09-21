@@ -46,7 +46,7 @@ public class MemberShipCallerInternalRestAdapter implements MemberShipOutputPort
         var memberShipFacadeVoResultResponse = memberFacade.findMemberById(memberId);
 
         if (ObjectUtils.isEmpty(memberShipFacadeVoResultResponse.data())) {
-            throw new IllegalArgumentException("회원을 조회하지 못했습니다. memberId: " + memberId);
+            throw new IllegalArgumentException("회원을 조회하지 못했습니다. wellnessChallengerId: " + memberId);
         }
         return createUserDetailsResponse(memberShipFacadeVoResultResponse.data());
     }
