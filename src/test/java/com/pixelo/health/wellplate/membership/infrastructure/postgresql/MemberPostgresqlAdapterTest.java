@@ -19,7 +19,7 @@ class MemberPostgresqlAdapterTest {
     private MemberPostgresqlAdapter memberPostgresqlAdapter;
 
     @Test
-    @DisplayName("회원 생성 테스트")
+    @DisplayName("회원 생성 테스트123")
     void save_Member() {
         String email = "test@naver.com";
         String password = "1234";
