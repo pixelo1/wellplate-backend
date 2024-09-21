@@ -8,6 +8,6 @@ public interface MemberCommandInputPort {
 
     MemberShipVo registerMemberCommand(RegisterMemberCommand command);
 //    MemberShipVo findMemberByEmail(String email);
-//    MemberShipVo findMemberById(UUID memberId);
+//    MemberShipVo findMemberById(UUID wellnessChallengerId);
 
 }

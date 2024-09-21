@@ -3,9 +3,8 @@ package com.pixelo.health.wellplate.core.filter;
 import com.pixelo.health.wellplate.core.auth.JwtProvider;
 import com.pixelo.health.wellplate.core.auth.TokenExpiredException;
 import com.pixelo.health.wellplate.core.spi.AuthUser;
-import com.pixelo.health.wellplate.core.spi.JwtUserDetails;
-import com.pixelo.health.wellplate.core.spi.UserService;
 import com.pixelo.health.wellplate.core.spi.TokenFacadeInCore;
+import com.pixelo.health.wellplate.core.spi.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -56,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //UsernamePasswordAuthenticationToken 생성되면서 isAuthenticated true로 들어간다
         //authUser
         AuthUser authUser = AuthUser.builder()
-                .memberId(memberId)
+                .wellnessChallengerId(memberId)
                 .build();
         var authenticationToken = new UsernamePasswordAuthenticationToken(authUser, jwtToken, jwtUserDetails.getAuthorities());
         var webAuthenticationDetails = new WebAuthenticationDetailsSource().buildDetails(request);

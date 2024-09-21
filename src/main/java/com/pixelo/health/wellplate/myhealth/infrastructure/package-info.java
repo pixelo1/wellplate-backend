@@ -1,4 +1,4 @@
 @InfrastructureRing
-package com.pixelo.health.wellplate.health.infrastructure;
+package com.pixelo.health.wellplate.myhealth.infrastructure;
 
 import org.jmolecules.architecture.onion.simplified.InfrastructureRing;

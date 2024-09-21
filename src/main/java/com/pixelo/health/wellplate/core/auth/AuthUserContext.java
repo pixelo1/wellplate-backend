@@ -21,6 +21,6 @@ public class AuthUserContext {
     }
 
     public UUID userId() {
-        return authUser().memberId();
+        return authUser().wellnessChallengerId();
     }
 }

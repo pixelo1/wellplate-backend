@@ -6,6 +6,6 @@ import java.util.UUID;
 
 @Builder
 public record AuthUser(
-        UUID memberId
+        UUID wellnessChallengerId
 ) {
 }
