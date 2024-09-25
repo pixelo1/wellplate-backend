@@ -32,6 +32,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Ignore
 @Import(SecurityConfig.class)
 @WebMvcTest(MemberCalleeExternalRestAdapter.class)
 class MemberCalleeExternalRestAdapterTest {

@@ -3,9 +3,8 @@ package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.
 import com.pixelo.health.wellplate.core.spi.AuthUser;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
 import com.pixelo.health.wellplate.myhealth.applidation.in.command.HealthCommandInputPort;
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.RegisterHealthCommand;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.HealthVo;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.HealthRequestMapStruct;
+import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.HealthResponseMapStruct;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.request.RegisterHealthRequest;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.response.RegisteredHealthResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "v1 - 내 건강 정보 API")
 public class HealthCalleeExternalRestAdapter {
 
-    private final HealthCommandInputPort healthCommandInputPort;
     private final HealthRequestMapStruct healthRequestMapStruct;
+    private final HealthResponseMapStruct healthResponseMapStruct;
+    private final HealthCommandInputPort healthCommandInputPort;
 
     @PostMapping
     @Operation(summary = "건강 상태 등록", description = "현재 체중, 목표 체중 등록")
@@ -31,7 +31,7 @@ public class HealthCalleeExternalRestAdapter {
                                                                    @RequestBody @Valid RegisterHealthRequest request) {
         var command = healthRequestMapStruct.toRegisterHealthCommand(request, authUser);
         var healthVo = healthCommandInputPort.registerHealthCommand(command);
-        var response = RegisteredHealthResponse.of(healthVo);
+        var response = healthResponseMapStruct.toRegisteredHealthResponse(healthVo);
         return ResultResponse.ok(response);
     }
 
