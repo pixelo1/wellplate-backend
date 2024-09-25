@@ -37,9 +37,6 @@ class HealthCalleeExternalRestAdapterTest {
     @InjectMocks
     private HealthCalleeExternalRestAdapter healthCalleeExternalRestAdapter;
 
-
-
-
     private static HealthRequestMapStructImpl requestMapStructImpl;
     private static HealthResponseMapStructImpl responseMapStructImpl;
     private static AuthUser authUser;
