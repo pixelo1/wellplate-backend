@@ -9,12 +9,16 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # 필요한 Python 버전을 지정하세요
 
       - name: Install dependencies
         run: |
           cd $GITHUB_WORKSPACE
-          # 필요한 패키지 설치 (예: requests)
           pip install requests PyGithub
 
       - name: Run code review
