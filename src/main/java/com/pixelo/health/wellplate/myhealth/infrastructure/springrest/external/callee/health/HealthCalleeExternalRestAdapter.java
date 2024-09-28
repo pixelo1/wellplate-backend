@@ -15,11 +15,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api/v1/health")
+@RestController
 @RequiredArgsConstructor
-@Tag(name = "v1 - 내 건강 정보 API")
+@Tag(name = "내 건강 정보 API")
+@RequestMapping("/api/v1/health")
 public class HealthCalleeExternalRestAdapter {
 
     private final HealthCommandInputPort healthCommandInputPort;
