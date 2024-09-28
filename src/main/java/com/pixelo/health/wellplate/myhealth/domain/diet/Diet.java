@@ -1,5 +1,7 @@
 package com.pixelo.health.wellplate.myhealth.domain.diet;
 
+import com.pixelo.health.wellplate.myhealth.domain.diet.valueobjects.Food;
+import com.pixelo.health.wellplate.myhealth.domain.diet.valueobjects.FoodInfo;
 import com.pixelo.health.wellplate.myhealth.domain.share.Date;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -9,9 +11,7 @@ import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.sql.JDBCType;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,5 +59,21 @@ public class Diet {
         this.foodInfo = FoodInfo.builder()
                 .foods(foods)
                 .build();
+    }
+
+    public UUID dietId() {
+        return this.dietId;
+    }
+    public UUID healthId() {
+        return this.healthId;
+    }
+    public UUID wellnessChallengerId() {
+        return this.wellnessChallengerId;
+    }
+    public FoodInfo foodInfo() {
+        return this.foodInfo;
+    }
+    public Date mealTime() {
+        return this.mealTime;
     }
 }

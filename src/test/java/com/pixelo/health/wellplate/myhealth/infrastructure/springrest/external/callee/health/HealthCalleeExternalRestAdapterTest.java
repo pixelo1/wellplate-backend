@@ -1,13 +1,9 @@
 package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health;
 
 import com.pixelo.health.wellplate.core.spi.AuthUser;
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.HealthCommandInputPort;
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.RegisterHealthCommand;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.HealthVo;
-import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.HealthRequestMapStruct;
-import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.HealthRequestMapStructImpl;
-import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.HealthResponseMapStruct;
-import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.HealthResponseMapStructImpl;
+import com.pixelo.health.wellplate.myhealth.applidation.in.command.health.HealthCommandInputPort;
+import com.pixelo.health.wellplate.myhealth.applidation.in.command.health.RegisterHealthCommand;
+import com.pixelo.health.wellplate.myhealth.applidation.vo.health.HealthVo;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.request.RegisterHealthRequest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;

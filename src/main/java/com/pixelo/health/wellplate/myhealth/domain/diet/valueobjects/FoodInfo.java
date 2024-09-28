@@ -1,10 +1,8 @@
-package com.pixelo.health.wellplate.myhealth.domain.diet;
+package com.pixelo.health.wellplate.myhealth.domain.diet.valueobjects;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,11 @@ public class FoodInfo {
     public FoodInfo(List<Food> foods) {
         this.foods = foods;
     }
-    protected FoodInfo() {
+    public FoodInfo() {
         this.foods = new ArrayList<>();
+    }
+
+    public List<Food> foods() {
+        return this.foods;
     }
 }

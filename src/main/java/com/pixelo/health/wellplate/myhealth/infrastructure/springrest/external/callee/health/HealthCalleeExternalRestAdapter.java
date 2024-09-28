@@ -2,9 +2,7 @@ package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.
 
 import com.pixelo.health.wellplate.core.spi.AuthUser;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.HealthCommandInputPort;
-import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.HealthRequestMapStruct;
-import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.HealthResponseMapStruct;
+import com.pixelo.health.wellplate.myhealth.applidation.in.command.health.HealthCommandInputPort;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.request.RegisterHealthRequest;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.response.RegisteredHealthResponse;
 import io.swagger.v3.oas.annotations.Operation;

@@ -16,4 +16,8 @@ public class Date {
     public Date(LocalDate date) {
         this.date = date;
     }
+
+    public LocalDate date() {
+        return this.date;
+    }
 }

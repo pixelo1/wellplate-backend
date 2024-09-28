@@ -1,4 +1,4 @@
-package com.pixelo.health.wellplate.myhealth.applidation.vo;
+package com.pixelo.health.wellplate.myhealth.applidation.vo.health;
 
 import lombok.Builder;
 
