@@ -1,9 +1,12 @@
 package com.pixelo.health.wellplate.myhealth.applidation.service;
 
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.RegisterHealthCommand;
+import com.pixelo.health.wellplate.myhealth.applidation.in.command.health.RegisterHealthCommand;
 import com.pixelo.health.wellplate.myhealth.applidation.out.HealthOutputPort;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.HealthVoMapStruct;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.HealthVoMapStructImpl;
+import com.pixelo.health.wellplate.myhealth.applidation.service.health.HealthCommandMapStruct;
+import com.pixelo.health.wellplate.myhealth.applidation.service.health.HealthCommandMapStructImpl;
+import com.pixelo.health.wellplate.myhealth.applidation.service.health.HealthCommandService;
+import com.pixelo.health.wellplate.myhealth.applidation.vo.health.HealthVoMapStruct;
+import com.pixelo.health.wellplate.myhealth.applidation.vo.health.HealthVoMapStructImpl;
 import com.pixelo.health.wellplate.myhealth.domain.health.Health;
 import com.pixelo.health.wellplate.myhealth.domain.health.domainservice.HealthFactory;
 import com.pixelo.health.wellplate.myhealth.domain.health.provider.HealthProvider;

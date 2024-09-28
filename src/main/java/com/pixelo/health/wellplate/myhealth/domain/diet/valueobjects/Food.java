@@ -1,4 +1,4 @@
-package com.pixelo.health.wellplate.myhealth.domain.diet;
+package com.pixelo.health.wellplate.myhealth.domain.diet.valueobjects;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,5 +23,12 @@ public class Food {
                 BigDecimal calorie) {
         this.name = name;
         this.calorie = calorie;
+    }
+
+    public String name() {
+        return this.name;
+    }
+    public BigDecimal calorie() {
+        return this.calorie;
     }
 }

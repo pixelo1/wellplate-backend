@@ -1,10 +1,10 @@
-package com.pixelo.health.wellplate.myhealth.applidation.service;
+package com.pixelo.health.wellplate.myhealth.applidation.service.health;
 
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.HealthCommandInputPort;
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.RegisterHealthCommand;
+import com.pixelo.health.wellplate.myhealth.applidation.in.command.health.HealthCommandInputPort;
+import com.pixelo.health.wellplate.myhealth.applidation.in.command.health.RegisterHealthCommand;
 import com.pixelo.health.wellplate.myhealth.applidation.out.HealthOutputPort;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.HealthVo;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.HealthVoMapStruct;
+import com.pixelo.health.wellplate.myhealth.applidation.vo.health.HealthVo;
+import com.pixelo.health.wellplate.myhealth.applidation.vo.health.HealthVoMapStruct;
 import com.pixelo.health.wellplate.myhealth.domain.health.domainservice.HealthFactory;
 import com.pixelo.health.wellplate.myhealth.domain.health.provider.HealthProviderImpl;
 import jakarta.transaction.Transactional;
