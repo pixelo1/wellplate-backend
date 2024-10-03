@@ -12,15 +12,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "내 식단 API")
-@RequestMapping("/api/v1/diet")
+@RequestMapping("/api/v1/health/{healthId}/diets")
 public class DietCalleeExternalRestAdapter {
 
     private final DietCommandInputPort dietCommandInputPort;
@@ -28,11 +27,13 @@ public class DietCalleeExternalRestAdapter {
     private final DietResponseMapStruct dietResponseMapStruct;
 
 
-    @PostMapping
+    @PostMapping("")
     @Operation(summary = "특정 시간의 식사 등록")
-    public ResultResponse<CreatedDietResponse> createDiet(@AuthenticationPrincipal AuthUser authUser,
-                                        @RequestBody @Valid CreateDietRequest createDietRequest) {
-        var command = dietRequestMapStruct.toCreateDietCommand(createDietRequest, authUser);
+    public ResultResponse<CreatedDietResponse> createDiet(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable("healthId") UUID healthId,
+            @RequestBody @Valid CreateDietRequest createDietRequest) {
+        var command = dietRequestMapStruct.toCreateDietCommand(createDietRequest, authUser, healthId);
         var dietVo = dietCommandInputPort.createDiet(command);
         var response = dietResponseMapStruct.toCreatedDietResponse(dietVo);
         return ResultResponse.ok(response);

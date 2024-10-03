@@ -26,4 +26,8 @@ public class FoodInfo {
     public List<Food> foods() {
         return this.foods;
     }
+
+    public int foodsSize() {
+        return this.foods.size();
+    }
 }

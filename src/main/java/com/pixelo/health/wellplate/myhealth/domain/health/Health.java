@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -44,6 +45,10 @@ public class Health {
     public Health(UUID wellnessChallengerId,
                   BigDecimal baseBodyWeight,
                   BigDecimal goalBodyWeight) {
+        Assert.notNull(wellnessChallengerId, "이용자 ID는 필수 입니다.");
+        Assert.notNull(baseBodyWeight, "현재 몸무게는 필수 입니다.");
+        Assert.notNull(goalBodyWeight, "목표 몸무게는 필수 입니다.");
+
         this.healthId = UUID.randomUUID();
         this.wellnessChallengerId = wellnessChallengerId;
         this.baseBodyWeight = BodyWeight.builder()

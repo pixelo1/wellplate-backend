@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -41,25 +42,29 @@ public class Diet {
     private Date mealTime;
 
     @Builder
-    public Diet(UUID healthId,
+    protected Diet(UUID healthId,
                 UUID wellnessChallengerId,
                 LocalDate mealTime) {
+        Assert.notNull(healthId, "건강 정보 ID는 필수 입니다.");
+        Assert.notNull(wellnessChallengerId, "이용자 ID는 필수 입니다.");
+        Assert.notNull(mealTime, "섭취 시간은 는 필수 입니다.");
+
         this.dietId = UUID.randomUUID();
         this.healthId = healthId;
         this.wellnessChallengerId = wellnessChallengerId;
-
         this.foodInfo = new FoodInfo();
-
         this.mealTime = Date.builder()
                 .date(mealTime)
                 .build();
     }
 
     public void updateFoodInfo(List<Food> foods) {
+        Assert.notEmpty(foods, "음식정보는 필수 입니다.");
         this.foodInfo = FoodInfo.builder()
                 .foods(foods)
                 .build();
     }
+
 
     public UUID dietId() {
         return this.dietId;
@@ -76,4 +81,6 @@ public class Diet {
     public Date mealTime() {
         return this.mealTime;
     }
+
+
 }

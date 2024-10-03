@@ -5,8 +5,10 @@ import com.pixelo.health.wellplate.myhealth.applidation.in.command.diet.CreateDi
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.request.CreateDietRequest;
 import org.mapstruct.Mapper;
 
+import java.util.UUID;
+
 @Mapper(componentModel = "spring")
 public interface DietRequestMapStruct {
 
-    CreateDietCommand toCreateDietCommand(CreateDietRequest request, AuthUser authUser);
+    CreateDietCommand toCreateDietCommand(CreateDietRequest request, AuthUser authUser, UUID healthId);
 }

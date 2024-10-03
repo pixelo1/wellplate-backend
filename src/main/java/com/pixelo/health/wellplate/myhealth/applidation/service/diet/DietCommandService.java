@@ -3,6 +3,7 @@ package com.pixelo.health.wellplate.myhealth.applidation.service.diet;
 import com.pixelo.health.wellplate.myhealth.applidation.in.command.diet.CreateDietCommand;
 import com.pixelo.health.wellplate.myhealth.applidation.in.command.diet.DietCommandInputPort;
 import com.pixelo.health.wellplate.myhealth.applidation.out.DietOutputPort;
+import com.pixelo.health.wellplate.myhealth.applidation.out.HealthOutputPort;
 import com.pixelo.health.wellplate.myhealth.applidation.vo.diet.DietVo;
 import com.pixelo.health.wellplate.myhealth.applidation.vo.diet.DietVoMapStruct;
 import com.pixelo.health.wellplate.myhealth.domain.diet.Diet;
@@ -21,8 +22,11 @@ public class DietCommandService implements DietCommandInputPort {
     private final DietOutputPort dietOutputPort;
     private final DietCommandMapStruct dietCommandMapStruct;
     private final DietVoMapStruct dietVoMapStruct;
+    private final HealthOutputPort healthOutputPort;
+
     @Override
     public DietVo createDiet(CreateDietCommand command) {
+        healthOutputPort.checkHealthIdOrException(command.healthId());
         var createDietDto = dietCommandMapStruct.toCreateDietDto(command);
         var diet = DietFactory.createDiet(createDietDto);
         var savedDiet = dietOutputPort.save(diet);

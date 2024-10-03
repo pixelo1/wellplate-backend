@@ -8,11 +8,10 @@ spring:
     active: default
   datasource:
     driver-class-name: org.postgresql.Driver
-#    url: "jdbc:${rdb.engine}://${rdb.host}:${rdb.port},${rdb.host}:${rdb.port}/${rdb.dbname}?targetServerType=primary"
-    url: "jdbc:${rdb.engine}://${rdb.host}:${rdb.port},${rdb.host}:${rdb.port}/${rdb.dbname}"
+    url: "jdbc:${rdb.engine}://${rdb.host}:${rdb.port}/${rdb.dbname}"
     username: "${rdb.username}"
     password: "${rdb.password}"
-    connectionTestQuery: "SELECT 1"
+#    connectionTestQuery: "SELECT 1"
     hikari:
       maximum-pool-size: 15
       minimum-idle: 15
