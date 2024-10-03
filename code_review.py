@@ -18,19 +18,23 @@ changed_files = [f.filename for f in pr.get_files()]
 # 코드 내용 가져오기
 code_contents = ""
 for file_path in changed_files:
-    if file_path.endswith('.py'):  # 필요한 확장자로 필터링
-        contents = repo.get_contents(file_path, ref=pr.head.ref)
-        code = contents.decoded_content.decode('utf-8')
-        code_contents += f"\n\n### 파일: {file_path}\n\n{code}"
+    # if file_path.endswith('.py'):  # 필요한 확장자로 필터링
+    contents = repo.get_contents(file_path, ref=pr.head.ref)
+    code = contents.decoded_content.decode('utf-8')
+    code_contents += f"\n\n### 파일: {file_path}\n\n{code}"
 
 # LLM API에 코드 리뷰 요청 보내기
 llm_api_url = 'http://localhost:8000/llama3-2/3b/ask'  # FastAPI 서비스 주소
 prompt = f"""
-당신은 숙련된 소프트웨어 엔지니어입니다. 다음 코드 변경 사항에 대한 코드 리뷰를 제공해주세요:
+you are master of software enginer.
+Review the provided code by checking Pre-Conditions. Ensure that all required variables hold the correct values and are within expected ranges before function execution. Highlight any invalid pre-conditions and suggest corrections. Provide step-by-step validation to avoid false positives. Consistent format required.
+Analyze the code for Runtime Errors. Identify potential runtime failures, such as unhandled exceptions or risky operations. Validate each case to confirm issues and highlight problematic lines. Suggest solutions for mitigating runtime risks. Keep the review in a structured format for clarity.
+Inspect the code for Optimization opportunities. If performance issues are detected, propose more efficient alternatives. Use benchmarks or examples to support suggestions. Highlight optimized portions for clear comparison. Always ensure validation of changes before recommendations.
+Check the code for any Security Issues. Look for vulnerable modules or coding practices that introduce security flaws. Validate the severity of each issue and offer fixes. Highlight affected areas clearly for ease of understanding. Consistency in format and explanation is crucial. 
+After reviewing Pre-Condition, Runtime Error, Optimization, and Security Issues, provide a final report. Ensure all changes and suggestions are validated. Highlight modified sections and maintain a consistent review format for easy comparison.
+Please provide code reviews for the following code changes:
 
 {code_contents}
-
-코드 품질, 잠재적 버그, 개선 사항 등에 대해 상세히 설명해주세요.
 """
 
 response = requests.get(llm_api_url, params={'prompt': prompt})

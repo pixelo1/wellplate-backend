@@ -1,12 +1,10 @@
 package com.pixelo.health.wellplate.myhealth.infrastructure.postgresql.health;
 
 
-import com.pixelo.health.wellplate.membership.infrastructure.postgresql.MemberPostgresqlAdapter;
 import com.pixelo.health.wellplate.myhealth.domain.health.Health;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

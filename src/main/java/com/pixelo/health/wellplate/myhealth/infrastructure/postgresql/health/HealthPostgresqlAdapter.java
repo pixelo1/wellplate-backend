@@ -5,6 +5,8 @@ import com.pixelo.health.wellplate.myhealth.domain.health.Health;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class HealthPostgresqlAdapter implements HealthOutputPort {
@@ -14,5 +16,11 @@ public class HealthPostgresqlAdapter implements HealthOutputPort {
     @Override
     public Health save(Health health) {
         return healthPostgresqlRepository.save(health);
+    }
+
+    @Override
+    public void checkHealthIdOrException(UUID healthId) {
+        healthPostgresqlRepository.findById(healthId)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 건강 정보가 없습니다."));
     }
 }
