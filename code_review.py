@@ -2,6 +2,7 @@ import os
 import requests
 from github import Github
 import json
+import re
 
 # GitHub 토큰 및 PR 정보 가져오기
 token = os.getenv('GITHUB_TOKEN')
@@ -29,22 +30,24 @@ for file in changed_files:
 # LLM API에 코드 리뷰 요청 보내기
 llm_api_url = 'http://localhost:8000/llama3-2/3b/ask'  # FastAPI 서비스 주소
 
-# LLM이 파일명, 라인 번호, 코멘트를 포함한 JSON 형식으로 응답하도록 프롬프트 수정
 prompt = f"""
 당신은 숙련된 소프트웨어 엔지니어입니다. 다음 코드 변경 사항에 대한 코드 리뷰를 제공해주세요:
 
 {code_contents}
 
-각 파일의 변경된 부분에 대해 라인 번호와 함께 리뷰 코멘트를 JSON 형식으로 제공해주세요.
+각 파일의 변경된 부분에 대해 **아래 형식으로만** JSON 배열로 리뷰 코멘트를 제공해주세요.
+
 예시:
 [
     {{
-        "file": "path/to/file.java",
+        "file": "path/to/file.py",
         "line": 42,
         "comment": "이 부분에서 변수명이 명확하지 않습니다."
     }},
     ...
 ]
+
+**위 형식 외에 다른 텍스트는 포함하지 마세요.**
 
 코드 품질, 잠재적 버그, 개선 사항 등에 대해 상세히 설명해주세요.
 """
@@ -56,13 +59,23 @@ if response.status_code == 200:
 else:
     llm_response = 'LLM API 요청에 실패했습니다.'
 
-# LLM 응답 파싱
-try:
-    comments = json.loads(llm_response)
-except json.JSONDecodeError:
-    print("LLM 응답을 파싱하는 데 실패했습니다.")
-    comments = []
+# LLM 응답 출력 (디버깅 목적)
+print("LLM 응답 내용:")
+print(llm_response)
 
+# LLM 응답에서 JSON 부분 추출
+json_pattern = r"\[.*\]"
+match = re.search(json_pattern, llm_response, re.DOTALL)
+if match:
+    json_text = match.group(0)
+    try:
+        comments = json.loads(json_text)
+    except json.JSONDecodeError:
+        print("LLM 응답을 파싱하는 데 실패했습니다.")
+        comments = []
+else:
+    print("응답에서 JSON을 찾을 수 없습니다.")
+    comments = []
 
 # 라인 번호를 GitHub의 diff position으로 변환하는 함수
 def line_to_position(patch, line_number):
