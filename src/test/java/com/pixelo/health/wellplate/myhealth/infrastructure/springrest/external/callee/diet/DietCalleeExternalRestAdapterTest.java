@@ -70,7 +70,6 @@ class DietCalleeExternalRestAdapterTest {
                 .calorie(BigDecimal.valueOf(300.2))
                 .build();
         var dietRequest = CreateDietRequest.builder()
-//                .healthId(UUID.randomUUID())
                 .mealTime(LocalDate.now())
                 .foodInfos(List.of(foodInfoRequest))
                 .build();

@@ -25,13 +25,14 @@ for file_path in changed_files:
 # LLM API에 코드 리뷰 요청 보내기
 llm_api_url = 'http://localhost:8000/llama3-2/3b/ask'  # FastAPI 서비스 주소
 prompt = f"""
-당신은 숙련된 소프트웨어 엔지니어입니다. 다음 코드 변경 사항에 대한 코드 리뷰를 제공해주세요:
+You are an experienced software engineer. Please provide a code review for the following code changes:
 
 {code_contents}
 
-코드 품질, 잠재적 버그, 개선 사항 등에 대해 기존 코드의 변경점을 명확히 표현하며 설명해주세요.
+Please clearly express and explain the modifications to the existing code concerning code quality, potential bugs, and improvements.
 """
-
+print('request : ')
+print(prompt)
 response = requests.get(llm_api_url, params={'prompt': prompt})
 
 if response.status_code == 200:
@@ -40,4 +41,6 @@ else:
     review_comment = 'LLM API 요청에 실패했습니다.'
 
 # PR에 리뷰 코멘트 추가
+print('response : ')
+print(review_comment)
 pr.create_issue_comment(review_comment)
