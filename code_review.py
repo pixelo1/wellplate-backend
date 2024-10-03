@@ -14,8 +14,7 @@ repo = g.get_repo(repo_name)
 pr = repo.get_pull(int(pr_number))
 
 # 변경된 파일 가져오기
-changed_files = [f.filename for f in pr.get_files()]
-
+changed_files = [f for f in pr.get_files()]
 
 # 코드 내용과 diff 가져오기
 code_contents = ""
