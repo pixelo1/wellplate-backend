@@ -2,18 +2,12 @@ package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.
 
 import com.pixelo.health.wellplate.core.spi.AuthUser;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.diet.CreateDietCommand;
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.diet.DietCommandInputPort;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.diet.DietVo;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.diet.FoodVo;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.health.HealthVo;
+import com.pixelo.health.wellplate.myhealth.application.in.command.diet.CreateDietCommand;
+import com.pixelo.health.wellplate.myhealth.application.in.command.diet.DietCommandInputPort;
+import com.pixelo.health.wellplate.myhealth.application.vo.diet.DietVo;
+import com.pixelo.health.wellplate.myhealth.application.vo.diet.FoodVo;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.request.CreateDietRequest;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.response.CreatedDietResponse;
-import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.HealthRequestMapStructImpl;
-import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.HealthResponseMapStructImpl;
-import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.request.RegisterHealthRequest;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.assertj.core.api.Assertions;
@@ -28,10 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class DietCalleeExternalRestAdapterTest {

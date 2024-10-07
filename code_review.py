@@ -1,6 +1,7 @@
 import os
 import requests
 from github import Github
+from github.GithubException import GithubException
 
 # GitHub 토큰 및 PR 정보 가져오기
 token = os.getenv('GITHUB_TOKEN')
@@ -18,9 +19,13 @@ changed_files = [f.filename for f in pr.get_files()]
 # 코드 내용 가져오기
 code_contents = ""
 for file_path in changed_files:
-    contents = repo.get_contents(file_path, ref=pr.head.ref)
-    code = contents.decoded_content.decode('utf-8')
-    code_contents += f"\n\n### 파일: {file_path}\n\n{code}"
+    try:
+        contents = repo.get_contents(file_path, ref=pr.head.ref)
+        code = contents.decoded_content.decode('utf-8')
+        code_contents += f"\n\n### 파일: {file_path}\n\n{code}"
+    except GithubException as e:
+        print(f"Failed to get contents of {file_path}: {e}")
+        continue
 
 # LLM API에 코드 리뷰 요청 보내기
 llm_api_url = 'http://localhost:8000/llama3-2/3b/ask'  # FastAPI 서비스 주소
