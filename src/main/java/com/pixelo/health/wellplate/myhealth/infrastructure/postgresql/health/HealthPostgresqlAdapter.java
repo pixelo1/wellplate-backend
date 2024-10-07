@@ -1,6 +1,6 @@
 package com.pixelo.health.wellplate.myhealth.infrastructure.postgresql.health;
 
-import com.pixelo.health.wellplate.myhealth.applidation.out.HealthOutputPort;
+import com.pixelo.health.wellplate.myhealth.application.out.HealthOutputPort;
 import com.pixelo.health.wellplate.myhealth.domain.health.Health;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

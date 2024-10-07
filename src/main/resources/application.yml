@@ -48,7 +48,6 @@ logging:
     jdk: ${logging.default-level}
     com: ${logging.default-level}
     org: ${logging.default-level}
-    reactor: ${logging.default-level}
 
 
 ---

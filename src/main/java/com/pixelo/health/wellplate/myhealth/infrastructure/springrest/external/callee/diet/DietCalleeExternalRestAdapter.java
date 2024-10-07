@@ -2,9 +2,7 @@ package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.
 
 import com.pixelo.health.wellplate.core.spi.AuthUser;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.diet.CreateDietCommand;
-import com.pixelo.health.wellplate.myhealth.applidation.in.command.diet.DietCommandInputPort;
-import com.pixelo.health.wellplate.myhealth.applidation.vo.diet.DietVo;
+import com.pixelo.health.wellplate.myhealth.application.in.command.diet.DietCommandInputPort;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.request.CreateDietRequest;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.response.CreatedDietResponse;
 import io.swagger.v3.oas.annotations.Operation;
