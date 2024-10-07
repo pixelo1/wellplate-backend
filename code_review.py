@@ -18,10 +18,9 @@ changed_files = [f.filename for f in pr.get_files()]
 # 코드 내용 가져오기
 code_contents = ""
 for file_path in changed_files:
-    if file_path.endswith('.py'):  # 필요한 확장자로 필터링
-        contents = repo.get_contents(file_path, ref=pr.head.ref)
-        code = contents.decoded_content.decode('utf-8')
-        code_contents += f"\n\n### 파일: {file_path}\n\n{code}"
+    contents = repo.get_contents(file_path, ref=pr.head.ref)
+    code = contents.decoded_content.decode('utf-8')
+    code_contents += f"\n\n### 파일: {file_path}\n\n{code}"
 
 # LLM API에 코드 리뷰 요청 보내기
 llm_api_url = 'http://localhost:8000/llama3-2/3b/ask'  # FastAPI 서비스 주소
