@@ -38,4 +38,24 @@ public class Food {
     @Column(name = "maker_name")
     @Comment("제조사명")
     private String makerName;
+
+
+    public String foodCode() {
+        return this.foodCode;
+    }
+    public String foodName() {
+        return this.foodName;
+    }
+    public BigDecimal calorie() {
+        return this.calorie;
+    }
+    public BigDecimal size() {
+        return this.size;
+    }
+    public String sizeUnit() {
+        return this.sizeUnit;
+    }
+    public String makerName() {
+        return this.makerName;
+    }
 }
