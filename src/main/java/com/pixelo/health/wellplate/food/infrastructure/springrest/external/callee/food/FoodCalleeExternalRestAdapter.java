@@ -35,4 +35,5 @@ public class FoodCalleeExternalRestAdapter {
         var response = foodResponseMapStruct.toSearchedFoodsResponse(foodVos);
         return ResultResponse.ok(response);
     }
+
 }

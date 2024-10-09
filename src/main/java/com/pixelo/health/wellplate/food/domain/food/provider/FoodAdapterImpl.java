@@ -38,4 +38,5 @@ public class FoodAdapterImpl implements FoodAdapter {
     public String getMakerName() {
         return food.makerName();
     }
+
 }
