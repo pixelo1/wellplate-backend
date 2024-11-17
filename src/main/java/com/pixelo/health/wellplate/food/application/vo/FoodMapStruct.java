@@ -20,4 +20,5 @@ public interface FoodMapStruct {
                 .foodVos(toFoodVoList(foodAdapters))
                 .build();
     }
+
 }
