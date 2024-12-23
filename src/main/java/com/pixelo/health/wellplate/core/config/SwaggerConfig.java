@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-// Well-Plate/swagger-ui/index.html
+// http://localhost:8080/swagger-ui/index.html
 @OpenAPIDefinition(info = @Info(title = "Well-Plate API", description = "건강한 식단관리 API Document"))
 @Configuration
 @RequiredArgsConstructor

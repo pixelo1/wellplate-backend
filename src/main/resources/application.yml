@@ -37,6 +37,9 @@ spring:
     baseline-version: 0
     out-of-order: true
     default-schema: public # flyway public 스키마를 사용
+  docker:
+    compose:
+      enabled: true
 
 
 logging:
