@@ -35,15 +35,19 @@ class DietCommandServiceTest {
     DietVoMapStruct dietVoMapStruct;
     @Mock
     HealthOutputPort healthOutputPort;
+    @Mock
+    DietFactory dietFactory;
     @InjectMocks
     DietCommandService dietCommandService;
 
     static DietCommandMapStructImpl dietCommandMapStructImpl;
     static DietVoMapStructImpl dietVoMapStructImpl;
+    static DietFactory dietFactoryNew;
     @BeforeAll
     static void setup() {
         dietCommandMapStructImpl = new DietCommandMapStructImpl();
         dietVoMapStructImpl = new DietVoMapStructImpl();
+        dietFactoryNew = new DietFactory();
     }
 
     @Test
@@ -63,7 +67,10 @@ class DietCommandServiceTest {
         Mockito.when(dietCommandMapStruct.toCreateDietDto(Mockito.any(CreateDietCommand.class)))
                 .thenReturn(createDietDto);
 
-        var diet = DietFactory.createDiet(createDietDto);
+        var diet = dietFactoryNew.createDiet(createDietDto);
+        Mockito.when(dietFactory.createDiet(Mockito.any()))
+                .thenReturn(diet);
+
         Mockito.when(dietOutputPort.save(Mockito.any(Diet.class)))
                 .thenReturn(diet);
 

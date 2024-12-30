@@ -5,13 +5,15 @@ import com.pixelo.health.wellplate.myhealth.domain.diet.domainservice.dto.Create
 import com.pixelo.health.wellplate.myhealth.domain.diet.valueobjects.Food;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class DietFactory {
 
-    public static Diet createDiet(@NotNull CreateDietDto createDietDto) {
+    public Diet createDiet(@NotNull CreateDietDto createDietDto) {
         var diet = Diet.builder()
                 .healthId(createDietDto.healthId())
                 .wellnessChallengerId(createDietDto.wellnessChallengerId())
@@ -22,13 +24,13 @@ public class DietFactory {
         return diet;
     }
 
-    private static List<Food> createFoods(@NotEmpty List<CreateDietDto.CreateFoodInfoDto> dtos) {
+    private List<Food> createFoods(@NotEmpty List<CreateDietDto.CreateFoodInfoDto> dtos) {
         return dtos.stream()
-                .map(DietFactory::createFood)
+                .map(this::createFood)
                 .collect(Collectors.toList());
     }
 
-    private static Food createFood(CreateDietDto.CreateFoodInfoDto dto) {
+    private Food createFood(CreateDietDto.CreateFoodInfoDto dto) {
         return Food.builder()
                 .name(dto.foodName())
                 .calorie(dto.calorie())

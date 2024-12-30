@@ -21,12 +21,13 @@ public class DietCommandService implements DietCommandInputPort {
     private final DietCommandMapStruct dietCommandMapStruct;
     private final DietVoMapStruct dietVoMapStruct;
     private final HealthOutputPort healthOutputPort;
+    private final DietFactory dietFactory;
 
     @Override
     public DietVo createDiet(CreateDietCommand command) {
         healthOutputPort.checkHealthIdOrException(command.healthId());
         var createDietDto = dietCommandMapStruct.toCreateDietDto(command);
-        var diet = DietFactory.createDiet(createDietDto);
+        var diet = dietFactory.createDiet(createDietDto);
         var savedDiet = dietOutputPort.save(diet);
         var dietAdapter = DietAdapter.builder().diet(savedDiet).build();
         return dietVoMapStruct.toDietVo(dietAdapter);
