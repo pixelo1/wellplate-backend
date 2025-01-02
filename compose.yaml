@@ -1,7 +1,18 @@
 services:
-  db:
-    image: postgis/postgis:16-3.4
-    container_name: rdb
+#  db:
+#    image: postgis/postgis:16-3.4
+#    container_name: rdb
+#    ports:
+#      - "${DB_PORT:-5432}:5432"
+#    environment:
+#      TZ: Asia/Seoul
+#      POSTGRES_USER: ${DB_USERNAME:-wellplate}
+#      POSTGRES_PASSWORD: ${DB_PASSWORD:-wellplate1234}
+#      POSTGRES_INITDB_ARGS: --encoding=UTF-8
+#    restart: unless-stopped
+  postgres-db:
+    image: postgres:12.22
+    container_name: postgres-db
     ports:
       - "${DB_PORT:-5432}:5432"
     environment:

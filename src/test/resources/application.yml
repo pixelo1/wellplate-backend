@@ -3,7 +3,8 @@ spring:
     active: test
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: "jdbc:tc:postgis:16-3.4:///postgres"
+#    url: "jdbc:tc:postgis:16-3.4:///postgres"
+    url: "jdbc:tc:postgresql:12.22:///postgres"
     username: user
     password: 1234
   jpa:
