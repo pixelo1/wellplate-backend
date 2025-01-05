@@ -15,6 +15,10 @@ public class RegisterMemberRequest {
     @Email
     @NotNull(message = "이메일은 필수입니다")
     private String email;
+
+    @NotNull(message = "로그인 아이디")
+    private String loginId;
+
     @NotNull(message = "비밀번호는 필수 입니다.")
     private String password;
 }

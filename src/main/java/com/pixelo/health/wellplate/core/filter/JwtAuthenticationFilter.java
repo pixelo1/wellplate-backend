@@ -1,6 +1,6 @@
 package com.pixelo.health.wellplate.core.filter;
 
-import com.pixelo.health.wellplate.core.auth.JwtProvider;
+import com.pixelo.health.wellplate.core.spi.JwtProvider;
 import com.pixelo.health.wellplate.core.auth.TokenExpiredException;
 import com.pixelo.health.wellplate.core.spi.AuthUser;
 import com.pixelo.health.wellplate.core.spi.TokenFacadeInCore;
@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         tokenValidation(jwtToken);
 
         var memberId = jwtProvider.extractMemberId(jwtToken);
-        var jwtUserDetails = userService.findUserById(memberId); // todo 토큰에 권한까지 넣어서 제거하자
+        var jwtUserDetails = userService.findUserById(memberId);
 
         //UsernamePasswordAuthenticationToken 생성되면서 isAuthenticated true로 들어간다
         //authUser

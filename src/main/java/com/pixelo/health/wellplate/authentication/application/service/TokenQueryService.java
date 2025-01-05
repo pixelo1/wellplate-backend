@@ -1,6 +1,6 @@
 package com.pixelo.health.wellplate.authentication.application.service;
 
-import com.pixelo.health.wellplate.authentication.application.in.query.TokenQueryInputPort;
+import com.pixelo.health.wellplate.authentication.application.in.TokenQueryInputPort;
 import com.pixelo.health.wellplate.authentication.application.out.TokenOutputPort;
 import com.pixelo.health.wellplate.authentication.domain.token.Token;
 import lombok.RequiredArgsConstructor;

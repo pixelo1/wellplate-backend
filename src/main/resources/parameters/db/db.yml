@@ -1,6 +1,6 @@
 rdb:
   engine: postgresql
-  dbname: postgres
+  dbname: wellplate
   port: 5432
   host: localhost
   username: wellplate

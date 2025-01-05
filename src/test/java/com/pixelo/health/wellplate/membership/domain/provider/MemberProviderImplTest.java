@@ -9,13 +9,15 @@ class MemberProviderImplTest {
 
     @Test
     void memberProviderImpl() {
+        String loginId = "test";
         String email = "test@naver.com";
         String password = "1234";
 
         var createdMember = Member.builder()
+                .loginId(loginId)
                 .email(email)
                 .password(password)
-                .memberType(MemberType.WELLNESS_CHALLENGER)
+                .memberType(MemberType.ROLE_WELLNESS_CHALLENGER)
                 .build();
 
         MemberEntityProvider memberProvider = MemberProviderImpl.from(createdMember);

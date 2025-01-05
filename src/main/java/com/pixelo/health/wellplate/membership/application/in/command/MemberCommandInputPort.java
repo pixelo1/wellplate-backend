@@ -1,13 +1,11 @@
 package com.pixelo.health.wellplate.membership.application.in.command;
 
-import com.pixelo.health.wellplate.membership.application.vo.MemberShipVo;
+import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
 
 import java.util.UUID;
 
 public interface MemberCommandInputPort {
 
-    MemberShipVo registerMemberCommand(RegisterMemberCommand command);
-//    MemberShipVo findMemberByEmail(String email);
-//    MemberShipVo findMemberById(UUID wellnessChallengerId);
+    MemberVo registerMemberCommand(RegisterMemberCommand command);
 
 }

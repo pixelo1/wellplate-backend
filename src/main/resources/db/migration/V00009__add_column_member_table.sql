@@ -1,0 +1,1 @@
+alter table wellplate.member add column login_id varchar(255);

@@ -7,7 +7,6 @@ import com.pixelo.health.wellplate.core.rest.ControllerAdvice;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
 import com.pixelo.health.wellplate.membership.application.in.command.MemberCommandInputPort;
 import com.pixelo.health.wellplate.membership.application.in.command.RegisterMemberCommand;
-import com.pixelo.health.wellplate.membership.application.vo.MemberShipVo;
 import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
 import com.pixelo.health.wellplate.membership.domain.MemberType;
 import com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee.request.RegisterMemberRequest;
@@ -50,6 +49,7 @@ class MemberCalleeExternalRestAdapterTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private final String loginId = "test";
     private final String email = "test@naver.com";
     private final String password = "1234";
     private final String memberType = "WELLNESS_CHALLENGER";
@@ -63,16 +63,13 @@ class MemberCalleeExternalRestAdapterTest {
 
         var memberId = UUID.randomUUID();
         var memberVo = createMemberVo(memberId);
-        var memberShipVo = MemberShipVo.builder()
-                .memberVo(memberVo)
-                .build();
         var expectedResponse = createRegisteredMemberResponse(memberVo);
 
         // Mock 객체 동작 설정
         Mockito.when(memberRequestStruct.toRegisterMemberCommand(any(RegisterMemberRequest.class)))
                 .thenReturn(command);
         Mockito.when(memberCommandInputPort.registerMemberCommand(any(RegisterMemberCommand.class)))
-                .thenReturn(memberShipVo);
+                .thenReturn(memberVo);
         Mockito.when(memberResponseStruct.toRegisteredMemberResponse(any(MemberVo.class)))
                 .thenReturn(expectedResponse);
 
@@ -119,9 +116,10 @@ class MemberCalleeExternalRestAdapterTest {
     private MemberVo createMemberVo(UUID memberId) {
         return new MemberVo(
                 memberId,
+                loginId,
                 email,
                 password,
-                MemberType.WELLNESS_CHALLENGER.code()
+                MemberType.ROLE_WELLNESS_CHALLENGER.code()
         );
     }
 

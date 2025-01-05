@@ -1,4 +1,4 @@
-package com.pixelo.health.wellplate.authentication.application.in.command;
+package com.pixelo.health.wellplate.authentication.application.in;
 
 public interface TokenCommandInputPort {
 

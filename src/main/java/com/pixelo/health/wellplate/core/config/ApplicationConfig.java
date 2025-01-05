@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+//Todo : SecurityConfig or AuthenticationConfig 로 이동
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -28,7 +29,7 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> repository.loadUserByUsername(username);
+        return loginId -> repository.loadUserByUsername(loginId);
     }
     @Bean
     public PasswordEncoder passwordEncoder() {

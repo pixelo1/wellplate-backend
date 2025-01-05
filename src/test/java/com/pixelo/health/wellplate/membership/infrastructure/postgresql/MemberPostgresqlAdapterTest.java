@@ -21,13 +21,15 @@ class MemberPostgresqlAdapterTest {
     @Test
     @DisplayName("회원 생성 테스트123")
     void save_Member() {
+        String loginId = "test";
         String email = "test@naver.com";
         String password = "1234";
 
         var createdMember = Member.builder()
+                .loginId(loginId)
                 .email(email)
                 .password(password)
-                .memberType(MemberType.WELLNESS_CHALLENGER)
+                .memberType(MemberType.ROLE_WELLNESS_CHALLENGER)
                 .build();
         var savedMember = memberPostgresqlAdapter.save(createdMember);
 
@@ -35,6 +37,6 @@ class MemberPostgresqlAdapterTest {
         Assertions.assertThat(savedMember.memberId()).isNotNull();
         Assertions.assertThat(savedMember.email()).isEqualTo(email);
         Assertions.assertThat(savedMember.password()).isEqualTo(password);
-        Assertions.assertThat(savedMember.memberType()).isEqualTo(MemberType.WELLNESS_CHALLENGER);
+        Assertions.assertThat(savedMember.memberType()).isEqualTo(MemberType.ROLE_WELLNESS_CHALLENGER);
     }
 }

@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record CreateMemberDto(
         String email,
+        String loginId,
         String password
 ) {
 }

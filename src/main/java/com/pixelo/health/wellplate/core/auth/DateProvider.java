@@ -1,17 +1,20 @@
 package com.pixelo.health.wellplate.core.auth;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
+@Component
 public class DateProvider {
 
-    private static Long systemCurrentMillis() {
+    private Long systemCurrentMillis() {
         return System.currentTimeMillis();
     }
-    public static Date currentTimeMillis() {
+    public Date currentTimeMillis() {
         return new Date(systemCurrentMillis());
     }
 
-    public static Date currentTimeMillisPlusMillis(long millis) {
+    public Date currentTimeMillisPlusMillis(long millis) {
         return new Date(systemCurrentMillis() + millis);
     }
 }

@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record AuthenticateMemberCommand(
-        String email,
+        String loginId,
         String password
 ) {
 }

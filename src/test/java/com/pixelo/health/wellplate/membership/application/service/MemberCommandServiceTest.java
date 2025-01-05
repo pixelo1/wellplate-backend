@@ -1,12 +1,14 @@
 package com.pixelo.health.wellplate.membership.application.service;
 
 import com.pixelo.health.wellplate.membership.application.in.command.RegisterMemberCommand;
+import com.pixelo.health.wellplate.membership.application.out.InternalEventOutputPort;
 import com.pixelo.health.wellplate.membership.application.out.MemberOutputPort;
 import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
 import com.pixelo.health.wellplate.membership.domain.Member;
 import com.pixelo.health.wellplate.membership.domain.domainservices.MemberFactory;
 import com.pixelo.health.wellplate.membership.domain.domainservices.dtos.CreateMemberDto;
 import com.pixelo.health.wellplate.membership.domain.provider.MemberProviderImpl;
+import com.pixelo.health.wellplate.membership.spi.MemberRegisteredEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.mockito.Mockito.verify;
 
@@ -26,6 +30,11 @@ class MemberCommandServiceTest {
     @Mock
     private MemberMapStruct memberMapStruct;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
+    private InternalEventOutputPort interalEventOutputPort;
+
     @InjectMocks
     private MemberCommandService memberCommandService;
 
@@ -33,30 +42,43 @@ class MemberCommandServiceTest {
     @DisplayName("회원가입 - 일반 - 테스트")
     void registerMemberCommandService() {
         // given
+        String loginId = "test";
         String email = "test@naver.com";
         String password = "1234";
 
         var command = RegisterMemberCommand.builder()
+                .loginId(loginId)
                 .email(email)
                 .password(password)
                 .build();
-        var createDto = CreateMemberDto.builder()
-                .email(email)
-                .password(password)
-                .build();
-        var createdMember = MemberFactory.createMemberTypeOfWellnessChallenger(createDto);
-        Mockito.when(memberOutputPort.save(Mockito.any(Member.class))).thenReturn(createdMember);
 
-        var createdMemberAdapter = MemberProviderImpl.from(createdMember);
+        var encodedPassword = new BCryptPasswordEncoder().encode(password);
+        Mockito.when(passwordEncoder.encode(password))
+                .thenReturn(encodedPassword);
+
+        var createDto = CreateMemberDto.builder()
+                .loginId(loginId)
+                .email(email)
+                .password(encodedPassword)
+                .build();
+
+        var createdMember = MemberFactory.createMemberTypeOfWellnessChallenger(createDto);
+        Mockito.when(memberOutputPort.save(Mockito.any(Member.class)))
+                .thenReturn(createdMember);
+
+
+        MemberRegisteredEvent memberRegisteredEvent = createdMember.toMemberRegisteredEvent();
+        Mockito.doNothing().when(interalEventOutputPort).publish(memberRegisteredEvent);
 
         var expectedMemberVo = buildMemberVo(createdMember);
-        Mockito.when(memberMapStruct.toMemberVo(Mockito.any(MemberProviderImpl.class))).thenReturn(expectedMemberVo);
+        Mockito.when(memberMapStruct.toMemberVo(Mockito.any(MemberProviderImpl.class)))
+                .thenReturn(expectedMemberVo);
 
         //when
-        var resultMemberVo = memberCommandService.registerMemberCommand(command);
+        var memberVo = memberCommandService.registerMemberCommand(command);
         //then
-        Assertions.assertNotNull(resultMemberVo);
-        Assertions.assertEquals(expectedMemberVo, resultMemberVo.memberVo());
+        Assertions.assertNotNull(memberVo);
+        Assertions.assertEquals(expectedMemberVo, memberVo);
 
         verify(memberOutputPort).save(Mockito.any(Member.class));
         verify(memberMapStruct).toMemberVo(Mockito.any(MemberProviderImpl.class));

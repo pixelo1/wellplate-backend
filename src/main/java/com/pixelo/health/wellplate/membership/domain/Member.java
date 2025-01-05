@@ -1,5 +1,6 @@
 package com.pixelo.health.wellplate.membership.domain;
 
+import com.pixelo.health.wellplate.membership.spi.MemberRegisteredEvent;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -14,10 +15,12 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @Table(name = "member", schema = "wellplate")
-public class Member implements UserDetails{
+public class Member{
 
     @Id
     private UUID memberId;
+
+    private String loginId;
 
     private String email;
 
@@ -28,21 +31,25 @@ public class Member implements UserDetails{
     private MemberType memberType;
 
     @Builder
-    public Member(String email,
+    public Member(String loginId,
+                  String email,
                   String password,
                   MemberType memberType) {
         //todo 추후 개인정보는 piid만 넣을예정
+        Assert.notNull(loginId, "아이디는 필수 입니다.");
         Assert.notNull(email, "이메일은 필수 입니다.");
         Assert.notNull(password, "비밀번호는 필수 입니다.");
         Assert.notNull(memberType, "회원 타입은 필수 입니다.");
 
         this.memberId = UUID.randomUUID();
+        this.loginId = loginId;
         this.email = email;
         this.password = password;
         this.memberType = memberType;
     }
 
     public UUID memberId() {return memberId;}
+    public String loginId() {return this.loginId;}
     public String email() {return this.email;}
     public String password() {return this.password;}
     public MemberType memberType() {
@@ -50,45 +57,15 @@ public class Member implements UserDetails{
     }
 
 
-
-    /**
-     * authenticate를 위한 override
-     * */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return memberType.getAuthorities();
+    public MemberRegisteredEvent toMemberRegisteredEvent() {
+        return MemberRegisteredEvent.builder()
+                .memberId(this.memberId)
+                .loginId(this.loginId)
+                .password(this.password)
+                .memberType(this.memberType.code())
+                .build();
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
 
-    /**
-     * 계정 탈퇴, 비밀번호 변경, 휴면, 락 등 정책을 추가해주면 된다
-     * */
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

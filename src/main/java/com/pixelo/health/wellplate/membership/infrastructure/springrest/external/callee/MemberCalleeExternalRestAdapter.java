@@ -30,8 +30,8 @@ public class MemberCalleeExternalRestAdapter {
             RegisterMemberRequest request
     ) {
         var command = memberRequestStruct.toRegisterMemberCommand(request);
-        var memberShipVo = memberCommandInputPort.registerMemberCommand(command);
-        var response = memberResponseStruct.toRegisteredMemberResponse(memberShipVo.memberVo());
+        var memberVo = memberCommandInputPort.registerMemberCommand(command);
+        var response = memberResponseStruct.toRegisteredMemberResponse(memberVo);
         return ResultResponse.ok(response);
     }
 

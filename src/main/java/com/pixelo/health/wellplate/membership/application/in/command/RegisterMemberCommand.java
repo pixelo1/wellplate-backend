@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record RegisterMemberCommand(
         String email,
+        String loginId,
         String password
 ) {
 }

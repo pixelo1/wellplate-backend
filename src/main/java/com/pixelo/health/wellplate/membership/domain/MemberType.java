@@ -9,8 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 public enum MemberType {
 
-    ADMIN("운영자"),
-    WELLNESS_CHALLENGER("일반사용자");
+    ROLE_ADMIN("운영자"),
+    ROLE_WELLNESS_CHALLENGER("일반사용자");
 
     private final String label;
 
@@ -22,9 +22,10 @@ public enum MemberType {
     }
 
     public List<SimpleGrantedAuthority> getAuthorities() {
-        var authority = new SimpleGrantedAuthority("ROLE_" + this.code());
+        var authority = new SimpleGrantedAuthority(this.code());
         var simpleGrantedAuthorities = new ArrayList<SimpleGrantedAuthority>();
         simpleGrantedAuthorities.add(authority);
         return simpleGrantedAuthorities;
     }
+
 }

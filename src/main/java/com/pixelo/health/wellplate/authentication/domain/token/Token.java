@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table(name = "token", schema = "public")
+@Table(name = "token", schema = "wellplate")
 @NoArgsConstructor
 public class Token {
 

@@ -1,4 +1,4 @@
-create table public.token
+create table wellplate.token
 (
     expired    boolean not null,
     revoked    boolean not null,

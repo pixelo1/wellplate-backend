@@ -1,13 +1,13 @@
-package com.pixelo.health.wellplate.membership;
+package com.pixelo.health.wellplate.membership.spi;
 
 import lombok.Builder;
 
 import java.util.UUID;
 
 @Builder
-public record MemberFacadeVo(
+public record MemberRegisteredEvent(
         UUID memberId,
-        String email,
+        String loginId,
         String password,
         String memberType
 ) {

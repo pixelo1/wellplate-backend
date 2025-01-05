@@ -1,7 +1,7 @@
 package com.pixelo.health.wellplate.authentication.infrastructure.springrest.internal.callee;
 
 import com.pixelo.health.wellplate.authentication.spi.TokenFacade;
-import com.pixelo.health.wellplate.authentication.application.in.query.TokenQueryInputPort;
+import com.pixelo.health.wellplate.authentication.application.in.TokenQueryInputPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 

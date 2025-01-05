@@ -1,14 +1,13 @@
-package com.pixelo.health.wellplate.membership.application.vo;
+package com.pixelo.health.wellplate.authentication.application.in.command.member;
 
 import lombok.Builder;
 
 import java.util.UUID;
 
 @Builder
-public record MemberVo(
+public record SaveMemberCommand(
         UUID memberId,
         String loginId,
-        String email,
         String password,
         String memberType
 ) {

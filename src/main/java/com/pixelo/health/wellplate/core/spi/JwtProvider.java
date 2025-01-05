@@ -1,10 +1,11 @@
-package com.pixelo.health.wellplate.core.auth;
+package com.pixelo.health.wellplate.core.spi;
 
-import com.pixelo.health.wellplate.core.spi.JwtUserDetails;
+import com.pixelo.health.wellplate.core.auth.DateProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,7 @@ import java.util.function.Function;
 
 //todo 인터페이스 제공으로 변경 필요
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
 
     @Value("${application.security.jwt.secret-key}")
@@ -29,6 +31,8 @@ public class JwtProvider {
     private long jwtExpiration;
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
+
+    private final DateProvider dateProvider;
 
     public UUID extractMemberId(String token) {
         String stringMemberId = extractClaim(token, Claims::getSubject);
@@ -61,8 +65,8 @@ public class JwtProvider {
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(String.valueOf(jwtUserDetails.memberId())) //todo memberId가 있어야 하지 않을까?
-                .issuedAt(DateProvider.currentTimeMillis())
-                .expiration(DateProvider.currentTimeMillisPlusMillis(expiration))
+                .issuedAt(dateProvider.currentTimeMillis())
+                .expiration(dateProvider.currentTimeMillisPlusMillis(expiration))
                 .signWith(getSignInKey())
                 .compact();
     }
