@@ -1,4 +1,4 @@
-package com.pixelo.health.wellplate.core.auth;
+package com.pixelo.health.wellplate.authentication.infrastructure.token;
 
 import org.springframework.stereotype.Component;
 

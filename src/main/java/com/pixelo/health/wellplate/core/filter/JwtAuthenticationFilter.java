@@ -1,6 +1,6 @@
 package com.pixelo.health.wellplate.core.filter;
 
-import com.pixelo.health.wellplate.core.spi.JwtProvider;
+import com.pixelo.health.wellplate.core.spi.JwtExtractor;
 import com.pixelo.health.wellplate.core.auth.TokenExpiredException;
 import com.pixelo.health.wellplate.core.spi.AuthUser;
 import com.pixelo.health.wellplate.core.spi.TokenFacadeInCore;
@@ -22,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtProvider jwtProvider;
+    private final JwtExtractor jwtExtractor;
     private final UserService userService;
     private final TokenFacadeInCore tokenFacadeInCore;
     private final static String HEADER_AUTHORIZATION = "Authorization";
@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // path /api/v1/auth 에서 필터 실행되는지 확인 필요 - 들어오면 제외 -
-        if (request.getServletPath().contains(EXCLUDE_PATH)) {
+        if (request.getServletPath().startsWith(EXCLUDE_PATH)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         tokenValidation(jwtToken);
 
-        var memberId = jwtProvider.extractMemberId(jwtToken);
+        var memberId = jwtExtractor.extractMemberId(jwtToken);
         var jwtUserDetails = userService.findUserById(memberId);
 
         //UsernamePasswordAuthenticationToken 생성되면서 isAuthenticated true로 들어간다
@@ -69,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void tokenValidation(String jwtToken) {
-        if (jwtProvider.isTokenExpired(jwtToken)) {
+        if (jwtExtractor.isTokenExpired(jwtToken)) {
             throw new TokenExpiredException();
         }
         var validatedToken = tokenFacadeInCore.validateToken(jwtToken);
