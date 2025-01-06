@@ -23,13 +23,13 @@ jobs:
         run: ./gradlew clean build
 
       - name: Copy JAR file to server
-        uses: appleboy/scp-action@v1.6.12
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{secrets.SSH_HOST}}
           username: pixelo
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          port: 22
+          port: 2022
           source: "build/libs/wellplate-0.0.1-SNAPSHOT.jar"
           target: "/home/pixelo/wellplate-0.0.1-SNAPSHOT.jar"
 
