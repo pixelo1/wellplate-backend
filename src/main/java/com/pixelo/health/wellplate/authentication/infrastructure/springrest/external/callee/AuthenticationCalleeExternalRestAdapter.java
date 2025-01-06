@@ -49,7 +49,7 @@ public class AuthenticationCalleeExternalRestAdapter {
         return ResultResponse.ok(response);
     }
 
-    @Operation(summary = "로그아웃", description = "사용자를 로그아웃합니다.")
+    @Operation(summary = "로그아웃", description = "사용자 로그아웃.")
     @PostMapping("/logout")
     public ResultResponse<?> logout(
             @RequestBody
