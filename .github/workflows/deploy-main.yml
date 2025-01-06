@@ -23,7 +23,7 @@ jobs:
         run: ./gradlew clean build
 
       - name: Copy JAR file to server
-        uses: appleboy/scp-action@v0.1.5
+        uses: appleboy/scp-action@v1.6.12
         with:
           host: ${{secrets.SSH_HOST}}
           username: pixelo
