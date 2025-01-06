@@ -32,5 +32,4 @@ jobs:
           #    Spring Boot 에서 actuator 가 활성화되어 있고, 서버 포트가 8080 라고 가정
           echo "Checking Health..."
           curl --fail http://localhost:8080/actuator/health
-
           echo "Health Check OK!"
