@@ -51,6 +51,11 @@ logging:
     jdk: ${logging.default-level}
     com: ${logging.default-level}
     org: ${logging.default-level}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 
 
 ---
