@@ -29,8 +29,8 @@ jobs:
       # 5) 서비스 재시작 (처음이라면 start, 기존에 있으면 stop 후 start)
       - name: Restart wellplate service
         run: |
-          echo 'Tmdghks1!' | sudo -S systemctl stop wellplate || true
-          echo 'Tmdghks1!' | sudo -S systemctl start wellplate
+          sudo systemctl stop wellplate || true
+          sudo systemctl start wellplate
 
       - name: Wait for Application & Health Check
         run: |
