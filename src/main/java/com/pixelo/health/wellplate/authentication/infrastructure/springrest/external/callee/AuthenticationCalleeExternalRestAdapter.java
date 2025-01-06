@@ -26,7 +26,7 @@ public class AuthenticationCalleeExternalRestAdapter {
     private final TokenCommandInputPort tokenCommandInputPort;
 
     @PostMapping("/authenticate")
-    @Operation(summary = "인증 및 로그인", description = "재 로그인시 기존 토큰 제거")
+    @Operation(summary = "인증 및 로그인 123", description = "로그인시 기존 토큰 제거")
     public ResultResponse<AuthenticationResponse> authenticateMember(
             @RequestBody
             AuthenticateMemberRequest request
