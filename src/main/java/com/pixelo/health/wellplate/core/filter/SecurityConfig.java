@@ -56,7 +56,7 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(authenticationProvider) //security에서 AuthenticationManager를 자동 생성하여 사용한다
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // filter 순서가 이상한듯
 
         return http.build();
     }
