@@ -17,7 +17,6 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build
 
-      # 4. Spring Boot 애플리케이션 실행
       #    jar 파일이 build/libs 디렉토리에 있다고 가정
       - name: Run Spring Boot App
         run: |
