@@ -30,8 +30,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22
-          source: "build/libs/well-plate.jar"
-          target: "/home/pixelo/well-plate.jar"
+          source: "build/libs/wellplate-0.0.1-SNAPSHOT.jar"
+          target: "/home/pixelo/wellplate-0.0.1-SNAPSHOT.jar"
 
       - name: SSH into server & run app
         uses: appleboy/ssh-action@v0.1.5
@@ -55,4 +55,4 @@ jobs:
 
             # Spring Boot 실행 (백그라운드)
             cd /home/pixelo
-            nohup java -jar well-plate.jar > /dev/null 2>&1 &
+            nohup java -jar wellplate-0.0.1-SNAPSHOT.jar > /dev/null 2>&1 &
