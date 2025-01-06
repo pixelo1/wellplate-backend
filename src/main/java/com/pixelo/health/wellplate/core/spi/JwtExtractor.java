@@ -1,13 +1,11 @@
 package com.pixelo.health.wellplate.core.spi;
 
-import com.pixelo.health.wellplate.core.auth.DateProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -15,24 +13,16 @@ import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
 //todo 인터페이스 제공으로 변경 필요
 @Component
 @RequiredArgsConstructor
-public class JwtProvider {
+public class JwtExtractor {
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
-    @Value("${application.security.jwt.expiration}")
-    private long jwtExpiration;
-    @Value("${application.security.jwt.refresh-token.expiration}")
-    private long refreshExpiration;
-
-    private final DateProvider dateProvider;
 
     public UUID extractMemberId(String token) {
         String stringMemberId = extractClaim(token, Claims::getSubject);
@@ -43,38 +33,6 @@ public class JwtProvider {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-
-    public <T extends UserDetails> String generateToken(T userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
-
-    private <T extends UserDetails> String generateToken(Map<String, Object> extraClaims, T userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
-    }
-
-    public <T extends UserDetails> String generateRefreshToken(T userDetails) {
-        return buildToken(new HashMap<>(), userDetails, refreshExpiration);
-    }
-
-    private <T extends UserDetails> String buildToken(
-            Map<String, Object> extraClaims,
-            T userDetails,
-            long expiration
-    ) {
-        var jwtUserDetails = (JwtUserDetails) userDetails;
-        return Jwts.builder()
-                .claims(extraClaims)
-                .subject(String.valueOf(jwtUserDetails.memberId())) //todo memberId가 있어야 하지 않을까?
-                .issuedAt(dateProvider.currentTimeMillis())
-                .expiration(dateProvider.currentTimeMillisPlusMillis(expiration))
-                .signWith(getSignInKey())
-                .compact();
-    }
-
-//    public boolean isTokenUserNameValid(String token, UserDetails userDetails) {
-//        final String username = extractUsername(token);
-//        return username.equals(userDetails.getUsername());
-//    }
 
     public boolean isTokenExpired(String token) {
         try {

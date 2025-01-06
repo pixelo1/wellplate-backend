@@ -7,7 +7,6 @@ import com.pixelo.health.wellplate.authentication.application.out.*;
 import com.pixelo.health.wellplate.authentication.application.vo.TokenVo;
 import com.pixelo.health.wellplate.authentication.domain.member.AuthMember;
 import com.pixelo.health.wellplate.authentication.domain.token.Token;
-import com.pixelo.health.wellplate.core.spi.JwtProvider;
 import com.pixelo.health.wellplate.core.spi.JwtUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +20,7 @@ import java.util.UUID;
 public class AuthenticationCommandService implements AuthenticationCommandInputPort {
 
     private final TokenOutputPort tokenOutputPort;
-    private final JwtProvider jwtProvider;
+    private final TokenGeneratorOutputPort tokenGeneratorOutputPort;
     private final AuthenticationManager authenticationManager;
     private final AuthMemberOutputPort authMemberOutputPort;
 
@@ -43,8 +42,8 @@ public class AuthenticationCommandService implements AuthenticationCommandInputP
         //todo : 회원정보 조회 -> 인증 BC에 맞게 생성
         var member = authMemberOutputPort.findMemberByLoginId(command.loginId());
         var jwtUserDetails = toJwtUserDetails(member);
-        var jwtToken = jwtProvider.generateToken(jwtUserDetails);
-        var refreshToken = jwtProvider.generateRefreshToken(jwtUserDetails);
+        var jwtToken = tokenGeneratorOutputPort.generateToken(jwtUserDetails);
+        var refreshToken = tokenGeneratorOutputPort.generateRefreshToken(jwtUserDetails);
 
         revokeAllUserTokens(jwtUserDetails);
         saveUserToken(jwtUserDetails.memberId(), jwtToken);
@@ -65,15 +64,14 @@ public class AuthenticationCommandService implements AuthenticationCommandInputP
     @Override
     public TokenVo refreshToken(RefreshTokenCommand command) {
         var refreshToken = command.refreshToken();
-        if (jwtProvider.isTokenExpired(refreshToken)) {
+        if (tokenGeneratorOutputPort.isTokenExpired(refreshToken)) {
             throw new IllegalArgumentException("토큰이 만료되었습니다.");
         }
-        var memberId = jwtProvider.extractMemberId(refreshToken);
-        //todo : 회원정보 조회 -> 인증 BC에 맞게 생성
+        var memberId = tokenGeneratorOutputPort.extractMemberId(refreshToken);
         var member = authMemberOutputPort.findMemberByMemberId(memberId);
 
         var jwtUserDetails = toJwtUserDetails(member);
-        var accessToken = jwtProvider.generateToken(jwtUserDetails);
+        var accessToken = tokenGeneratorOutputPort.generateToken(jwtUserDetails);
         revokeAllUserTokens(jwtUserDetails);
         saveUserToken(jwtUserDetails.memberId(), accessToken);
         return TokenVo.builder()
