@@ -56,10 +56,29 @@ logging:
 ---
 spring:
   config:
+    activate:
+      on-profile: local
     import:
       - classpath:parameters/logging/logging.yml
       - classpath:parameters/db/db.yml
       - classpath:parameters/jwt/jwt.yml
+application:
+  security:
+    jwt:
+      secret-key: ${jwt.secret-key}
+      expiration: ${jwt.expiration}
+      refresh-token:
+        expiration: ${jwt.refresh-token.expiration}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import:
+      - classpath:parameters/dev/logging/logging.yml
+      - classpath:parameters/dev/db/db.yml
+      - classpath:parameters/dev/jwt/jwt.yml
 application:
   security:
     jwt:
