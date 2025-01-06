@@ -29,7 +29,6 @@ jobs:
           echo "Waiting for the application to start..."
           sleep 60   # 서비스가 구동될 시간을 줍니다 (상황에 따라 조절)
 
-          #    Spring Boot 에서 actuator 가 활성화되어 있고, 서버 포트가 8080 라고 가정
           echo "Checking Health..."
           curl --fail http://localhost:8080/actuator/health
           echo "Health Check OK!"
