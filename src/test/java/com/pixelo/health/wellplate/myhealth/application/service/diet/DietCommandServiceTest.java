@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,7 +60,7 @@ class DietCommandServiceTest {
         var command = CreateDietCommand.builder()
                 .wellnessChallengerId(UUID.randomUUID())
                 .healthId(UUID.randomUUID())
-                .mealTime(LocalDate.now())
+                .mealTime(LocalDateTime.now())
                 .foodInfos(List.of(createFoodInfo))
                 .build();
 
@@ -86,7 +87,7 @@ class DietCommandServiceTest {
         assertEquals(diet.dietId(), result.dietId());
         assertEquals(diet.healthId(), result.healthId());
         assertEquals(diet.wellnessChallengerId(), result.wellnessChallengerId());
-        assertEquals(diet.mealTime().date(), result.mealTime());
+        assertEquals(diet.mealTime(), result.mealTime());
         assertEquals(diet.foodInfo().foods().get(0).name(), result.foodVos().get(0).name());
         assertEquals(diet.foodInfo().foods().get(0).calorie(), result.foodVos().get(0).calorie());
 

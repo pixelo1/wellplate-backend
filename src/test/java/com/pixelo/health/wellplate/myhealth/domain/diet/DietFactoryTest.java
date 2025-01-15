@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -36,7 +37,7 @@ public class DietFactoryTest {
         CreateDietDto createDietDto = CreateDietDto.builder()
                 .wellnessChallengerId(UUID.randomUUID())
                 .healthId(UUID.randomUUID())
-                .mealTime(LocalDate.now())
+                .mealTime(LocalDateTime.now())
                 .createFoodInfoDtos(foodInfo)
                 .build();
 
@@ -50,7 +51,7 @@ public class DietFactoryTest {
         assertThat(diet.dietId()).isNotNull();
         assertThat(diet.wellnessChallengerId()).isEqualTo(createDietDto.wellnessChallengerId());
         assertThat(diet.healthId()).isEqualTo(createDietDto.healthId());
-        assertThat(diet.mealTime().date()).isEqualTo(createDietDto.mealTime());
+        assertThat(diet.mealTime()).isEqualTo(createDietDto.mealTime());
 
         List<Food> foods = diet.foodInfo().foods();
         assertThat(foods.size()).isEqualTo(2);

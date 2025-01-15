@@ -4,6 +4,7 @@ import com.pixelo.health.wellplate.myhealth.domain.diet.Diet;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,8 +30,8 @@ public class DietAdapter {
     public UUID getWellnessChallengerId() {
         return diet.wellnessChallengerId();
     }
-    public LocalDate getMealTime() {
-        return diet.mealTime().date();
+    public LocalDateTime getMealTime() {
+        return diet.mealTime();
     }
 
     public List<FoodAdapter> getFoodAdapters() {

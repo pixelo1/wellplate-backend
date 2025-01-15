@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -25,15 +26,15 @@ class DietTest {
 
     static Stream<Arguments> dietRequiredNullParam() {
         return Stream.of(
-                Arguments.of(null, UUID.randomUUID(), LocalDate.now(), "건강 정보 ID는 필수 입니다."),
-                Arguments.of(UUID.randomUUID(), null, LocalDate.now(), "이용자 ID는 필수 입니다."),
+                Arguments.of(null, UUID.randomUUID(), LocalDateTime.now(), "건강 정보 ID는 필수 입니다."),
+                Arguments.of(UUID.randomUUID(), null, LocalDateTime.now(), "이용자 ID는 필수 입니다."),
                 Arguments.of(UUID.randomUUID(), UUID.randomUUID(), null, "섭취 시간은 는 필수 입니다.")
         );
     }
 
     @ParameterizedTest
     @MethodSource("dietRequiredNullParam")
-    void Diet_필수값_null_테스트(UUID healthId, UUID wellnessChallengerId, LocalDate mealTime, String expectedMessage) {
+    void Diet_필수값_null_테스트(UUID healthId, UUID wellnessChallengerId, LocalDateTime mealTime, String expectedMessage) {
         //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             Diet.builder()
@@ -82,7 +83,7 @@ class DietTest {
         Diet diet = Diet.builder()
                 .healthId(UUID.randomUUID())
                 .wellnessChallengerId(UUID.randomUUID())
-                .mealTime(LocalDate.now())
+                .mealTime(LocalDateTime.now())
                 .build();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             diet.updateFoodInfo(foods);

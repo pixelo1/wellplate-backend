@@ -55,7 +55,7 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResultResponse<String> validException(HttpServletRequest request, Exception e) {
         logErrorMessageWithStackTrace(request, e);
-        return ResultResponse.failedAbout(String.format("Please try again in a momentarily : %s", e.getMessage()));
+        return ResultResponse.failedAbout(String.format("%s", e.getMessage()));
     }
     private void logErrorMessage(HttpServletRequest request, Exception e) {
         logErrorMessage(request, e, false);
@@ -68,7 +68,6 @@ public class ControllerAdvice {
     private void logErrorMessage(HttpServletRequest request, Exception e, boolean printStackTrace) {
         var userId = authUserContext.userId();
         var errorMessage = "[UserID:" + userId + " ABOUT_REQ: "+ request.getMethod() +" "+ request.getRequestURI() +"]: " + e.getMessage();
-//        var errorMessage = " ABOUT_REQ: "+ request.getMethod() +" "+ request.getRequestURI() +"]: " + e.getMessage();
         if (activeProfileProvider.isLocal() || printStackTrace) {
             log.error(errorMessage, e);
             return;
