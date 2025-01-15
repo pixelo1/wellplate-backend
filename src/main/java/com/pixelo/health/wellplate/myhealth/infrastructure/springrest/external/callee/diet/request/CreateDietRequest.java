@@ -1,5 +1,6 @@
 package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,10 +12,10 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Valid
 @Getter
 @Builder
 @AllArgsConstructor
@@ -22,13 +23,13 @@ import java.util.UUID;
 public class CreateDietRequest {
 
     @NotNull
-    @Schema(title = "섭취 시간", example = "2024-01-02")
-    private LocalDate mealTime;
+    @Schema(title = "섭취 시간", example = "2021-08-01 12:30:22")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime mealTime;
 
     @NotEmpty
     private List<FoodInfoRequest> foodInfos;
 
-    @Valid
     @Getter
     @Builder
     @AllArgsConstructor

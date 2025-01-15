@@ -3,8 +3,11 @@ package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.
 import com.pixelo.health.wellplate.core.spi.AuthUser;
 import com.pixelo.health.wellplate.core.spi.ResultResponse;
 import com.pixelo.health.wellplate.myhealth.application.in.command.diet.DietCommandInputPort;
+import com.pixelo.health.wellplate.myhealth.application.in.query.diet.DietQueryInputPort;
+import com.pixelo.health.wellplate.myhealth.application.in.query.diet.GetRegisteredDietQuery;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.request.CreateDietRequest;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.response.CreatedDietResponse;
+import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.response.GetRegisteredDietResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -12,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,6 +27,7 @@ public class DietCalleeExternalRestAdapter {
     private final DietCommandInputPort dietCommandInputPort;
     private final DietRequestMapStruct dietRequestMapStruct;
     private final DietResponseMapStruct dietResponseMapStruct;
+    private final DietQueryInputPort dietQueryInputPort;
 
 
     @PostMapping("")
@@ -34,6 +39,24 @@ public class DietCalleeExternalRestAdapter {
         var command = dietRequestMapStruct.toCreateDietCommand(createDietRequest, authUser, healthId);
         var dietVo = dietCommandInputPort.createDiet(command);
         var response = dietResponseMapStruct.toCreatedDietResponse(dietVo);
+        return ResultResponse.ok(response);
+    }
+
+    @GetMapping
+    @Operation(summary = "내가 등록한 식단 조회")
+    public ResultResponse<GetRegisteredDietResponse> getDiet(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable("healthId") UUID healthId) {
+        var query = GetRegisteredDietQuery.builder()
+                .wellnessChallengerId(authUser.wellnessChallengerId())
+                .healthId(healthId)
+                .build();
+        var dietVos = dietQueryInputPort.getRegisteredDiet(query);
+        var dietResponse = dietVos.stream().map(dietResponseMapStruct::toGetRegisteredDietResponseDietResponse)
+                .toList();
+        var response = GetRegisteredDietResponse.builder()
+                .diets(dietResponse)
+                .build();
         return ResultResponse.ok(response);
     }
 }

@@ -1,6 +1,7 @@
 package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health;
 
 import com.pixelo.health.wellplate.myhealth.application.vo.health.HealthVo;
+import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.response.FindRegisteredHealthResponse;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health.response.RegisteredHealthResponse;
 import org.mapstruct.Mapper;
 
@@ -8,4 +9,5 @@ import org.mapstruct.Mapper;
 public interface HealthResponseMapStruct {
 
     RegisteredHealthResponse toRegisteredHealthResponse(HealthVo vo);
+    FindRegisteredHealthResponse toFindRegisteredHealthResponse(HealthVo vo);
 }

@@ -13,6 +13,7 @@ import org.hibernate.type.SqlTypes;
 import org.springframework.util.Assert;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,15 +37,16 @@ public class Diet {
     @JdbcTypeCode(SqlTypes.JSON)
     private FoodInfo foodInfo;
 
-    @Embedded
+//    @Embedded
     @Comment(value = "섭취 시간")
-    @AttributeOverride(name = "date", column = @Column(name = "meal_time"))
-    private Date mealTime;
+//    @AttributeOverride(name = "date", column = @Column(name = "meal_time"))
+    @Column(name = "meal_time")
+    private LocalDateTime mealTime;
 
     @Builder
     protected Diet(UUID healthId,
                 UUID wellnessChallengerId,
-                LocalDate mealTime) {
+                LocalDateTime mealTime) {
         Assert.notNull(healthId, "건강 정보 ID는 필수 입니다.");
         Assert.notNull(wellnessChallengerId, "이용자 ID는 필수 입니다.");
         Assert.notNull(mealTime, "섭취 시간은 는 필수 입니다.");
@@ -53,9 +55,7 @@ public class Diet {
         this.healthId = healthId;
         this.wellnessChallengerId = wellnessChallengerId;
         this.foodInfo = new FoodInfo();
-        this.mealTime = Date.builder()
-                .date(mealTime)
-                .build();
+        this.mealTime = mealTime;
     }
 
     public void updateFoodInfo(List<Food> foods) {
@@ -78,7 +78,7 @@ public class Diet {
     public FoodInfo foodInfo() {
         return this.foodInfo;
     }
-    public Date mealTime() {
+    public LocalDateTime mealTime() {
         return this.mealTime;
     }
 

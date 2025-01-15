@@ -3,6 +3,7 @@ package com.pixelo.health.wellplate.myhealth.application.vo.diet;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,7 +12,7 @@ public record DietVo(
         UUID dietId,
         UUID healthId,
         UUID wellnessChallengerId,
-        LocalDate mealTime,
+        LocalDateTime mealTime,
         List<FoodVo> foodVos
 ) {
 }

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Import;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ class DietPostgresqlAdapterTest {
         var diet = Diet.builder()
                 .healthId(UUID.randomUUID())
                 .wellnessChallengerId(UUID.randomUUID())
-                .mealTime(LocalDate.now())
+                .mealTime(LocalDateTime.now())
                 .build();
         Food food = Food.builder()
                 .name("김치찌개")
