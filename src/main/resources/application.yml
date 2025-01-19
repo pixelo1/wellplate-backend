@@ -84,6 +84,9 @@ spring:
       - classpath:parameters/dev/logging/logging.yml
       - classpath:parameters/dev/db/db.yml
       - classpath:parameters/dev/jwt/jwt.yml
+  docker:
+    compose:
+      enabled: false
 application:
   security:
     jwt:
