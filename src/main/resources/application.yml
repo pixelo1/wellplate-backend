@@ -74,7 +74,6 @@ application:
       expiration: ${jwt.expiration}
       refresh-token:
         expiration: ${jwt.refresh-token.expiration}
-
 ---
 spring:
   config:
