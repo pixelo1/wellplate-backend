@@ -35,6 +35,19 @@ pipeline {
                 sh './gradlew clean build'
             }
         }
+        stage('Build Image') {
+            steps {
+                withCredentials([dockerConfigJson(credentialsId: 'kubernetes://well-plate/gcr-json-key')]) {
+                    def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+                    //v1.0-<커밋해시>
+                    def imageTag = "asia-northeast3-docker.pkg.dev/well-plate-448307/well-plate/health-backend:v1.0-${shortCommit}"
 
+                    sh """
+                    docker build --platform=linux/amd64 --no-cache --push -t ${imageTag} .
+
+                    """
+                }
+            }
+        }
     }
 }
