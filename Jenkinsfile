@@ -7,8 +7,9 @@ pipeline {
 
 
         // 컨테이너 레지스트리 정보
-        CONTAINER_REGISTRY_URL = "my-registry.com"
-        IMAGE_NAME   = "backend"
+        CONTAINER_REGISTRY_URL = "asia-northeast3-docker.pkg.dev/well-plate-448307/well-plate"
+        IMAGE_NAME   = "health-backend"
+        BACKEND_VERSION = "v1.0"
 
         // k8s 매니페스트 Repo
         K8S_REPO_URL = "~~~.git"
@@ -38,14 +39,16 @@ pipeline {
         stage('Build Image') {
             steps {
                 withCredentials([dockerConfigJson(credentialsId: 'kubernetes://well-plate/gcr-json-key')]) {
-                    def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-                    //v1.0-<커밋해시>
-                    def imageTag = "asia-northeast3-docker.pkg.dev/well-plate-448307/well-plate/health-backend:v1.0-${shortCommit}"
+                   script {
+                       def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+                       //v1.0-<커밋해시>
+                       def imageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${BACKEND_VERSION}-${shortCommit}"
 
-                    sh """
-                    docker build --platform=linux/amd64 --no-cache --push -t ${imageTag} .
-
-                    """
+                        sh """
+                        docker build --platform=linux/amd64 --no-cache -t ${imageTag} .
+                        docker push ${imageTag}
+                        """
+                   }
                 }
             }
         }
