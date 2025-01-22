@@ -21,16 +21,16 @@ pipeline {
 
 
     stages {
-//         stage('Checkout') {
-//             steps {
-//                 checkout scm
-//             }
-//         }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
         stage('Checkout Backend Code') {
             steps {
                 // 백엔드 소스코드 (GitRepo #1) 클론
-                git branch: 'main', url: "${BACKEND_REPO_URL}"
+                git branch: 'feature/jenkins', url: "${BACKEND_REPO_URL}"
             }
         }
         stage('Build & Test') {
