@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        docker 'docker_cli'
+        dockerTool 'docker_cli'
         jdk 'jdk_21_adoptium'
     }
 
