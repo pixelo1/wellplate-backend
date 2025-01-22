@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'jdk_21_adoptium'
+    }
+
     environment {
         // 백엔드 깃 REPO
         BACKEND_REPO_URL = "https://github.com/pixelo1/wellplate-backend.git"
