@@ -1,8 +1,0 @@
-jwt:
-  secret-key: F881C93945971D0B8BE0F4766DFC0792538D9DC25F9CEF80663F9F85FFD6DD87 #wellnesschallenger
-  #  secret-key: wellnesschallenger #wellnesschallenger
-  expiration: 600000 # 10 min
-  refresh-token:
-    expiration: 1200000 # 20 min
-#    expiration: 86400000 # a day
-#    expiration: 604800000 # 7 days

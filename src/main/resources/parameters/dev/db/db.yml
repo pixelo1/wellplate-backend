@@ -1,7 +1,0 @@
-rdb:
-  engine: postgresql
-  dbname: wellplate
-  host: postgres
-  port: 5432
-  username: wellplate
-  password: wellplate1234
