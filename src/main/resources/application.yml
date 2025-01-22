@@ -30,6 +30,7 @@ spring:
       show-sql:
         use_sql_comments: ${logging.default-show-sql}
         use_jdbc_metadata_defaults: ${logging.default-show-sql}
+    open-in-view: false
   flyway:
     enabled: true
     create-schemas: true
