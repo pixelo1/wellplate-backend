@@ -8,7 +8,6 @@ pipeline {
     environment {
         // 백엔드 깃 REPO
         BACKEND_REPO_URL = "https://github.com/pixelo1/wellplate-backend.git"
-        SPRING_PROFILES_ACTIVE = 'test-no-container'
 
         // 컨테이너 레지스트리 정보
         CONTAINER_REGISTRY_URL = "asia-northeast3-docker.pkg.dev/well-plate-448307/well-plate"
@@ -37,8 +36,7 @@ pipeline {
         stage('Build & Test') {
             steps {
                 // 예: Gradle 빌드
-//                 sh './gradlew clean build -Dspring.profiles.active=test-no-container'
-                sh './gradlew clean build'
+                sh './gradlew clean build -Dspring.profiles.active=test-no-container'
             }
         }
         stage('Build Image') {
