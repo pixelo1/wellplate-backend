@@ -36,7 +36,8 @@ pipeline {
         stage('Build & Test') {
             steps {
                 // 예: Gradle 빌드
-                sh './gradlew clean build -Dspring.profiles.active=test-no-container'
+//                 sh './gradlew clean build -Dspring.profiles.active=test-no-container'
+                sh './gradlew clean build'
             }
         }
         stage('Build Image') {
