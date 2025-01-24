@@ -18,6 +18,10 @@ pipeline {
         // k8s 매니페스트 Repo
         K8S_REPO_URL = "~~~.git"
         K8S_REPO_DIR = "well-plate"
+
+//         도커 레지스트리 인증 정보
+        DOCKER_CONFIG = '/root/.docker'
+
     }
 
 
