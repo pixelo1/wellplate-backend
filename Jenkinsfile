@@ -20,8 +20,7 @@ pipeline {
         K8S_REPO_DIR = "well-plate"
 
 //         도커 레지스트리 인증 정보
-        DOCKER_CONFIG = '/root/.docker'
-
+        DOCKER_CONFIG = "/var/jenkins_home/.docker"
     }
 
 
