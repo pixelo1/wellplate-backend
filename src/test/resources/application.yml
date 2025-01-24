@@ -27,13 +27,3 @@ application:
       expiration: 100000
       refresh-token:
         expiration: 1000000
-
----
-spring:
-  config:
-    activate:
-      on-profile: test-container-ryuk-disabled
-
-ryuk:
-  container:
-    enabled: false
