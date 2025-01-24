@@ -21,6 +21,7 @@ pipeline {
 
 //         도커 레지스트리 인증 정보
         DOCKER_CONFIG = "/var/jenkins_home/.docker"
+        TESTCONTAINERS_RYUK_DISABLED = 'false' // 테스트 컨테이너 ryuk 비활성화
     }
 
 
@@ -28,14 +29,6 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
-            }
-        }
-
-        stage('docker 확인') {
-            steps {
-                    sh 'docker info'
-                    sh 'ls -la /var/jenkins_home/.docker/config.json'
-                    sh 'whoami'  // 현재 실행 사용자 확인
             }
         }
 
@@ -61,6 +54,15 @@ pipeline {
                    }
                 }
             }
+        }
+    }
+    post {
+        always {
+            // 빌드 후 Docker 컨테이너 정리
+            sh '''
+            docker container prune -f
+            docker image prune -f
+            '''
         }
     }
 }
