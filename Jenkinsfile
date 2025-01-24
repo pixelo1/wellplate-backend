@@ -31,7 +31,7 @@ pipeline {
         stage('Build & Test') {
             steps {
                 // 예: Gradle 빌드
-                sh './gradlew clean build'
+                sh './gradlew clean build --debug'
             }
         }
         stage('Build Image') {
