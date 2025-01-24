@@ -42,7 +42,8 @@ pipeline {
         stage('Build & Test') {
             steps {
                 // 예: Gradle 빌드
-                sh './gradlew clean build --debug'
+                sh './gradlew clean build --debug --Dspring.profiles.active=test-container-ryuk-disabled'
+
             }
         }
         stage('Build Image') {
