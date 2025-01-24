@@ -28,24 +28,9 @@ pipeline {
             }
         }
 
-       stage('Setup Docker CLI') {
-            steps {
-                script {
-                    // Docker CLI 다운로드 및 압축 해제
-                    sh '''
-                    DOCKER_VERSION=23.0.0
-                    curl -L https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz | tar -xz
-                    export PATH=$PWD/docker:$PATH
-                    '''
-                    // 이제 docker 명령어 사용 가능
-                }
-            }
-        }
-
         stage('Build & Test') {
             steps {
                 // 예: Gradle 빌드
-//                 sh './gradlew clean build -Dspring.profiles.active=test-no-container'
                 sh './gradlew clean build'
             }
         }
@@ -58,7 +43,7 @@ pipeline {
                        def imageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${BACKEND_VERSION}-${shortCommit}"
 
                         sh """
-                        docker build --platform=linux/amd64 --no-cache -t ${imageTag} .
+                        docker build --platform=linux/amd64 -t ${imageTag} .
                         docker push ${imageTag}
                         """
                    }
