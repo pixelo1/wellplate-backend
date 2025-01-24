@@ -31,6 +31,14 @@ pipeline {
             }
         }
 
+        stage('docker 확인') {
+            steps {
+                    sh 'docker info'
+                    sh 'ls -la /var/jenkins_home/.docker/config.json'
+                    sh 'whoami'  // 현재 실행 사용자 확인
+            }
+        }
+
         stage('Build & Test') {
             steps {
                 // 예: Gradle 빌드
