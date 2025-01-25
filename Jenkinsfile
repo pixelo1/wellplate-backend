@@ -55,7 +55,6 @@ pipeline {
         }
     }
 
-
     post {
         always {
             // 빌드 후 Docker 컨테이너 정리
