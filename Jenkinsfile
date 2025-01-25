@@ -22,7 +22,6 @@ pipeline {
 //         도커 레지스트리 인증 정보
         DOCKER_CONFIG = "/var/jenkins_home/.docker"
 //         TESTCONTAINERS_RYUK_DISABLED = 'true' // 테스트 컨테이너 ryuk 비활성화
-
     }
 
     stages {
