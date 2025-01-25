@@ -23,10 +23,7 @@ pipeline {
         DOCKER_CONFIG = "/var/jenkins_home/.docker"
 //         TESTCONTAINERS_RYUK_DISABLED = 'true' // 테스트 컨테이너 ryuk 비활성화
 //         TESTCONTAINERS_HOST_OVERRIDE = 'host.docker.internal'
-//         TESTCONTAINERS_HOST_OVERRIDE = 'unix:///var/run/docker.sock' // Docker 소켓 직접 참조
-
     }
-
 
     stages {
         stage('Checkout') {
