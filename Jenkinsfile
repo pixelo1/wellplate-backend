@@ -35,7 +35,6 @@ pipeline {
             steps {
                 // 예: Gradle 빌드
                 sh './gradlew clean build --info'
-
             }
         }
         stage('Build Image') {
