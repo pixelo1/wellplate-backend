@@ -24,7 +24,8 @@ pipeline {
         CLOUDSDK_CORE_PROJECT = 'well-plate-448307'
 
         // 수정할 아르고CD 매니페스트 경로
-        ARGO_MANIFEST_PATH = "micro-k8s/well-plate/backend/well-plate-health.yaml"
+//         ARGO_MANIFEST_PATH = "micro-k8s/well-plate/backend/well-plate-health.yaml"
+        ARGO_MANIFEST_BACKEND_PATH = "well-plate/backend/well-plate-health.yaml"
 
     }
 
@@ -71,6 +72,8 @@ pipeline {
                     git branch: 'main',
                         credentialsId: 'new-pat-hoan1015-gmail',
                         url: "https://${K8S_REPO_URL}"
+
+                    sh 'ls -l well-plate/backend/'
                 }
             }
         }
@@ -87,10 +90,10 @@ pipeline {
                             git config user.name ${GIT_USERNAME}
 
                             # 2) YAML 파일에서 image 태그 교체
-                            sed -i 's|image:.*|image: ${env.NEW_IMAGE_TAG}|' ${env.ARGO_MANIFEST_PATH}
+                            sed -i 's|image:.*|image: ${env.NEW_IMAGE_TAG}|' ${env.ARGO_MANIFEST_BACKEND_PATH}
 
                             # 3) 변경 사항 커밋
-                            git add ${env.ARGO_MANIFEST_PATH}
+                            git add ${env.ARGO_MANIFEST_BACKEND_PATH}
                             git commit -m "Update backend image to ${env.NEW_IMAGE_TAG}"
 
                             # 4) Git push
