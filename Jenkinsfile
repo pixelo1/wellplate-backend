@@ -10,6 +10,9 @@ pipeline {
         // 백엔드 깃 REPO
         BACKEND_REPO_URL = "https://github.com/pixelo1/wellplate-backend.git"
 
+        K8S_REPO_URL = "github.com/pixelo1/well-plate-k8s.git"
+
+
         // 컨테이너 레지스트리 정보
         CONTAINER_REGISTRY_URL = "asia-northeast3-docker.pkg.dev/well-plate-448307/well-plate"
         IMAGE_NAME   = "health-backend"
@@ -61,6 +64,17 @@ pipeline {
             }
         }
 
+        stage('Checkout K8s Repo') {
+            steps {
+                // 별도의 디렉토리 'k8s-repo'에 well-plate-k8s 레포지토리를 체크아웃
+                dir('k8s-repo') {
+                    git branch: 'main',
+                        credentialsId: 'new-pat-hoan1015-gmail',
+                        url: "https://${K8S_REPO_URL}"
+                }
+            }
+        }
+
         stage('Bump Kubernetes YAML') {
             steps {
                 // GitHub에 푸시할 준비를 위해 Git 설정
@@ -69,10 +83,9 @@ pipeline {
                         sh """
                         # 1) Git 사용자 설정
                         git config user.email "hoan1015@gmail.com"
-                        git config user.name "pixelo1"
+                        git config user.name ${GIT_USERNAME}
 
                         # 2) YAML 파일에서 image 태그 교체
-                        #    ARGO_MANIFEST_PATH는 'micro-k8s/well-plate/backend/well-plate-health.yaml'
                         sed -i 's|image:.*|image: ${env.NEW_IMAGE_TAG}|' ${env.ARGO_MANIFEST_PATH}
 
                         # 3) 변경 사항 커밋
@@ -80,7 +93,7 @@ pipeline {
                         git commit -m "Update backend image to ${env.NEW_IMAGE_TAG}"
 
                         # 4) Git push
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/pixelo1/well-plate-k8s.git HEAD:main
+                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${K8S_REPO_URL} HEAD:main
                         """
                     }
                 }
