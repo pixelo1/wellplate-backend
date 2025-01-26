@@ -39,15 +39,21 @@ pipeline {
         }
         stage('Build Image') {
             steps {
-                withCredentials([dockerConfigJson(credentialsId: 'kubernetes://well-plate/gcr-json-key')]) {
+                withCredentials([file(credentialsId: 'kubernetes://well-plate/gcr-json-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                    script {
                        def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
                        //v1.0-<커밋해시>
                        def imageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${BACKEND_VERSION}-${shortCommit}"
 
                         sh """
+                        mkdir -p ~/.docker
+                        cat \$GOOGLE_APPLICATION_CREDENTIALS > ~/.docker/config.json
+
                         docker build --platform=linux/amd64 -t ${imageTag} .
                         docker push ${imageTag}
+
+                        rm -f ~/.docker/config.json  # 인증 정보 삭제
+
                         """
                    }
                 }
