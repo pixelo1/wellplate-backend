@@ -17,6 +17,8 @@ pipeline {
 
         // 도커 레지스트리 인증 정보
         DOCKER_CONFIG = "/var/jenkins_home/.docker"
+
+        CLOUDSDK_CORE_PROJECT = 'well-plate-448307'
     }
 
     stages {
@@ -40,6 +42,7 @@ pipeline {
 
                      // dockerconfigjson Secret 으로 이미 로그인 상태
                     sh """
+
                     docker build -t ${imageTag} .
                     docker push ${imageTag}
                     """
