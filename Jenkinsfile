@@ -15,13 +15,8 @@ pipeline {
         IMAGE_NAME   = "health-backend"
         BACKEND_VERSION = "v1.0"
 
-        // k8s 매니페스트 Repo
-        K8S_REPO_URL = "~~~.git"
-        K8S_REPO_DIR = "well-plate"
-
 //         도커 레지스트리 인증 정보
         DOCKER_CONFIG = "/var/jenkins_home/.docker"
-//         TESTCONTAINERS_RYUK_DISABLED = 'true' // 테스트 컨테이너 ryuk 비활성화
     }
 
     stages {
@@ -37,25 +32,26 @@ pipeline {
                 sh './gradlew clean build'
             }
         }
+
+        stage('Debug') {
+            steps {
+                sh 'ls -la /var/jenkins_home/credentials/'
+                sh 'env | grep DOCKER'
+            }
+        }
+
         stage('Build Image') {
             steps {
-                withCredentials([file(credentialsId: 'kubernetes://well-plate/gcr-json-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                   script {
-                       def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-                       //v1.0-<커밋해시>
-                       def imageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${BACKEND_VERSION}-${shortCommit}"
+                withCredentials([dockerConfigJson(credentialsId: 'gcr-json-key', variable: 'DOCKER_CONFIG')]) {  // kubernetes:// 제거
+                    script {
+                        def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+                        def imageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${BACKEND_VERSION}-${shortCommit}"
 
                         sh """
-                        mkdir -p ~/.docker
-                        cat \$GOOGLE_APPLICATION_CREDENTIALS > ~/.docker/config.json
-
                         docker build --platform=linux/amd64 -t ${imageTag} .
                         docker push ${imageTag}
-
-                        rm -f ~/.docker/config.json  # 인증 정보 삭제
-
                         """
-                   }
+                    }
                 }
             }
         }
