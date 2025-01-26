@@ -85,18 +85,14 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'new-pat-hoan1015-gmail', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         script {
                             sh """
-                            # 1) Git 사용자 설정
                             git config user.email "hoan1015@gmail.com"
                             git config user.name ${GIT_USERNAME}
 
-                            # 2) YAML 파일에서 image 태그 교체
                             sed -i 's|image:.*|image: ${env.NEW_IMAGE_TAG}|' ${env.ARGO_MANIFEST_BACKEND_PATH}
 
-                            # 3) 변경 사항 커밋
                             git add ${env.ARGO_MANIFEST_BACKEND_PATH}
                             git commit -m "Update backend image to ${env.NEW_IMAGE_TAG}"
 
-                            # 4) Git push
                             git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@${K8S_REPO_URL}
                             git push origin HEAD:main
 
