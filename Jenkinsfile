@@ -32,7 +32,6 @@ pipeline {
                 sh './gradlew clean build'
             }
         }
-
         stage('Build Image and Push to GCR') {
             steps {
                 withCredentials([file(credentialsId: 'jenkins-gcr-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]){
