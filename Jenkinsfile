@@ -40,7 +40,7 @@ pipeline {
 
                      // dockerconfigjson Secret 으로 이미 로그인 상태
                     sh """
-                    docker build --platform=linux/amd64 -t ${imageTag} .
+                    docker build -t ${imageTag} .
                     docker push ${imageTag}
                     """
                 }
