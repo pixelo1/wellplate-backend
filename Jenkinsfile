@@ -19,6 +19,10 @@ pipeline {
         DOCKER_CONFIG = "/var/jenkins_home/.docker"
 
         CLOUDSDK_CORE_PROJECT = 'well-plate-448307'
+
+        // 수정할 아르고CD 매니페스트 경로
+        ARGO_MANIFEST_PATH = "micro-k8s/well-plate/backend/well-plate-health.yaml"
+
     }
 
     stages {
@@ -50,9 +54,38 @@ pipeline {
                         docker build -t ${imageTag} .
                         docker push ${imageTag}
                         """
+                        env.NEW_IMAGE_TAG = imageTag
+
                     }
                 }
             }
         }
+
+        stage('Bump Kubernetes YAML') {
+            steps {
+                // GitHub에 푸시할 준비를 위해 Git 설정
+                withCredentials([usernamePassword(credentialsId: 'new-pat-hoan1015-gmail', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                    script {
+                        sh """
+                        # 1) Git 사용자 설정
+                        git config user.email "hoan1015@gmail.com"
+                        git config user.name "pixelo1"
+
+                        # 2) YAML 파일에서 image 태그 교체
+                        #    ARGO_MANIFEST_PATH는 'micro-k8s/well-plate/backend/well-plate-health.yaml'
+                        sed -i 's|image:.*|image: ${env.NEW_IMAGE_TAG}|' ${env.ARGO_MANIFEST_PATH}
+
+                        # 3) 변경 사항 커밋
+                        git add ${env.ARGO_MANIFEST_PATH}
+                        git commit -m "Update backend image to ${env.NEW_IMAGE_TAG}"
+
+                        # 4) Git push
+                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/pixelo1/well-plate-k8s.git HEAD:main
+                        """
+                    }
+                }
+            }
+        }
+
     }
 }
