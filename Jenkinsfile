@@ -34,6 +34,7 @@ pipeline {
                 sh './gradlew clean build'
             }
         }
+
         stage('Build Image and Push to GCR') {
             steps {
                 withCredentials([file(credentialsId: 'jenkins-gcr-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
@@ -43,6 +44,7 @@ pipeline {
 
                          // dockerconfigjson Secret 으로 이미 로그인 상태
                         sh """
+
                         gcloud auth activate-service-account --key-file=\$GOOGLE_APPLICATION_CREDENTIALS
 
                         docker build -t ${imageTag} .
