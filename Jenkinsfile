@@ -32,17 +32,38 @@ pipeline {
                 sh './gradlew clean build'
             }
         }
-
+        stage('Debug Credentials') {
+            steps {
+                script {
+                    // 사용 가능한 credentials 목록 출력
+                    def credentials = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
+                        com.cloudbees.plugins.credentials.common.StandardCredentials.class,
+                        Jenkins.instance,
+                        null,
+                        null
+                    )
+                    credentials.each {
+                        println it.id
+                    }
+                }
+            }
+        }
         stage('Build Image') {
             steps {
-                withCredentials([dockerConfigJson(credentialsId: 'gcr-json-key', variable: 'DOCKER_CONFIG')]) {  // kubernetes:// 제거
+                withCredentials([usernamePassword(credentialsId: 'jenkins-gcr-key',
+                                                  usernameVariable: 'DOCKER_USERNAME',
+                                                  passwordVariable: 'DOCKER_PASSWORD')]) {
                     script {
                         def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
                         def imageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${BACKEND_VERSION}-${shortCommit}"
 
                         sh """
+                        echo \$DOCKER_PASSWORD | docker login ${CONTAINER_REGISTRY_URL} -u \$DOCKER_USERNAME --password-stdin
+
                         docker build --platform=linux/amd64 -t ${imageTag} .
                         docker push ${imageTag}
+
+                        docker logout ${CONTAINER_REGISTRY_URL}
                         """
                     }
                 }
