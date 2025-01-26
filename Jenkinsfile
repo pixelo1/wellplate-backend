@@ -34,7 +34,7 @@ pipeline {
         stage('Build & Test') {
             steps {
                 // 예: Gradle 빌드
-                sh './gradlew clean build --info'
+                sh './gradlew clean build'
             }
         }
         stage('Build Image') {
@@ -52,16 +52,6 @@ pipeline {
                    }
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            // 빌드 후 Docker 컨테이너 정리
-            sh '''
-            docker container prune -f
-            docker image prune -f
-            '''
         }
     }
 }
