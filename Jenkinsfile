@@ -36,16 +36,19 @@ pipeline {
         }
         stage('Build Image and Push to GCR') {
             steps {
-                script {
-                    def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-                    def imageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${BACKEND_VERSION}-${shortCommit}"
+                withCredentials([file(credentialsId: 'jenkins-gcr-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    script {
+                        def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+                        def imageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${BACKEND_VERSION}-${shortCommit}"
 
-                     // dockerconfigjson Secret 으로 이미 로그인 상태
-                    sh """
+                         // dockerconfigjson Secret 으로 이미 로그인 상태
+                        sh """
+                        gcloud auth activate-service-account --key-file=\$GOOGLE_APPLICATION_CREDENTIALS
 
-                    docker build -t ${imageTag} .
-                    docker push ${imageTag}
-                    """
+                        docker build -t ${imageTag} .
+                        docker push ${imageTag}
+                        """
+                    }
                 }
             }
         }
