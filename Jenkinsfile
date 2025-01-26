@@ -77,24 +77,26 @@ pipeline {
 
         stage('Bump Kubernetes YAML') {
             steps {
-                // GitHub에 푸시할 준비를 위해 Git 설정
-                withCredentials([usernamePassword(credentialsId: 'new-pat-hoan1015-gmail', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
-                    script {
-                        sh """
-                        # 1) Git 사용자 설정
-                        git config user.email "hoan1015@gmail.com"
-                        git config user.name ${GIT_USERNAME}
+                dir('k8s-repo') {
+                    // GitHub에 푸시할 준비를 위해 Git 설정
+                    withCredentials([usernamePassword(credentialsId: 'new-pat-hoan1015-gmail', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        script {
+                            sh """
+                            # 1) Git 사용자 설정
+                            git config user.email "hoan1015@gmail.com"
+                            git config user.name ${GIT_USERNAME}
 
-                        # 2) YAML 파일에서 image 태그 교체
-                        sed -i 's|image:.*|image: ${env.NEW_IMAGE_TAG}|' ${env.ARGO_MANIFEST_PATH}
+                            # 2) YAML 파일에서 image 태그 교체
+                            sed -i 's|image:.*|image: ${env.NEW_IMAGE_TAG}|' ${env.ARGO_MANIFEST_PATH}
 
-                        # 3) 변경 사항 커밋
-                        git add ${env.ARGO_MANIFEST_PATH}
-                        git commit -m "Update backend image to ${env.NEW_IMAGE_TAG}"
+                            # 3) 변경 사항 커밋
+                            git add ${env.ARGO_MANIFEST_PATH}
+                            git commit -m "Update backend image to ${env.NEW_IMAGE_TAG}"
 
-                        # 4) Git push
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${K8S_REPO_URL} HEAD:main
-                        """
+                            # 4) Git push
+                            git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${K8S_REPO_URL} HEAD:main
+                            """
+                        }
                     }
                 }
             }
