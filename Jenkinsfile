@@ -15,7 +15,7 @@ pipeline {
         IMAGE_NAME   = "health-backend"
         BACKEND_VERSION = "v1.0"
 
-//         도커 레지스트리 인증 정보
+        // 도커 레지스트리 인증 정보
         DOCKER_CONFIG = "/var/jenkins_home/.docker"
     }
 
