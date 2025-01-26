@@ -24,7 +24,7 @@ pipeline {
         CLOUDSDK_CORE_PROJECT = 'well-plate-448307'
 
         // 수정할 아르고CD 매니페스트 경로
-        ARGO_MANIFEST_PATH = "/micro-k8s/well-plate/backend/well-plate-health.yaml"
+        ARGO_MANIFEST_PATH = "micro-k8s/well-plate/backend/well-plate-health.yaml"
 
     }
 
@@ -94,7 +94,9 @@ pipeline {
                             git commit -m "Update backend image to ${env.NEW_IMAGE_TAG}"
 
                             # 4) Git push
-                            git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${K8S_REPO_URL} HEAD:main
+                            git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@${K8S_REPO_URL}
+                            git push origin HEAD:main
+
                             """
                         }
                     }
