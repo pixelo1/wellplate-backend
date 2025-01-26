@@ -33,7 +33,7 @@ pipeline {
             }
         }
 
-        stage('Build Image') {
+        stage('Build Image and Push to GCR') {
             steps {
                 withCredentials([file(credentialsId: 'jenkins-gcr-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]){
                     script {
