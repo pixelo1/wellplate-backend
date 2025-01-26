@@ -21,7 +21,7 @@ pipeline {
         CLOUDSDK_CORE_PROJECT = 'well-plate-448307'
 
         // 수정할 아르고CD 매니페스트 경로
-        ARGO_MANIFEST_PATH = "micro-k8s/well-plate/backend/well-plate-health.yaml"
+        ARGO_MANIFEST_PATH = "/micro-k8s/well-plate/backend/well-plate-health.yaml"
 
     }
 
