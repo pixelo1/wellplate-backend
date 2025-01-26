@@ -33,13 +33,6 @@ pipeline {
             }
         }
 
-        stage('Debug') {
-            steps {
-                sh 'ls -la /var/jenkins_home/credentials/'
-                sh 'env | grep DOCKER'
-            }
-        }
-
         stage('Build Image') {
             steps {
                 withCredentials([dockerConfigJson(credentialsId: 'gcr-json-key', variable: 'DOCKER_CONFIG')]) {  // kubernetes:// 제거
