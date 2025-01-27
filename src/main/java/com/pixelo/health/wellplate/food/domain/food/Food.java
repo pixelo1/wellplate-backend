@@ -39,6 +39,13 @@ public class Food {
     @Comment("제조사명")
     private String makerName;
 
+    @Column(name = "nutrition_base_amount")
+    @Comment("영양소 기준량")
+    private BigDecimal nutritionBaseAmount;
+
+    @Column(name = "nutrition_base_unit")
+    @Comment("영양소 기준 단위")
+    private String nutritionBaseUnit;
 
     public String foodCode() {
         return this.foodCode;
