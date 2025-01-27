@@ -1,80 +1,107 @@
 pipeline {
     agent any
 
-    enviroment {
+    tools {
+        dockerTool 'docker_cli'
+        jdk 'jdk_21_adoptium'
+    }
+
+    environment {
         // 백엔드 깃 REPO
-        BACKEND_REPO_URL = "~~~.git"
+        BACKEND_REPO_URL = "https://github.com/pixelo1/wellplate-backend.git"
+
+        K8S_REPO_URL = "github.com/pixelo1/well-plate-k8s.git"
 
 
         // 컨테이너 레지스트리 정보
-        CONTAINER_REGISTRY_URL = "my-registry.com"
-        IMAGE_NAME   = "backend"
+        CONTAINER_REGISTRY_URL = "asia-northeast3-docker.pkg.dev/well-plate-448307/well-plate"
+        IMAGE_NAME   = "health-backend"
+        BACKEND_VERSION = "v1.0"
 
-        // k8s 매니페스트 Repo
-        K8S_REPO_URL = "~~~.git"
-        K8S_REPO_DIR = "well-plate"
+        // 도커 레지스트리 인증 정보
+        DOCKER_CONFIG = "/var/jenkins_home/.docker"
+
+        CLOUDSDK_CORE_PROJECT = 'well-plate-448307'
+
+        // 수정할 아르고CD 매니페스트 경로
+//         ARGO_MANIFEST_PATH = "micro-k8s/well-plate/backend/well-plate-health.yaml"
+        ARGO_MANIFEST_BACKEND_PATH = "well-plate/backend/well-plate-health.yaml"
+
     }
 
-
     stages {
-        stage('Checkout Backend Code') {
+        stage('Checkout') {
             steps {
-                // 백엔드 소스코드 (GitRepo #1) 클론
-                git branch: 'main', url: ${BACKEND_REPO_URL}
+                checkout scm
             }
         }
+
         stage('Build & Test') {
             steps {
                 // 예: Gradle 빌드
                 sh './gradlew clean build'
             }
         }
-        stage('Docker Build & Push') {
+
+        stage('Build Image and Push to GCR') {
             steps {
-                script {
-                    // 버전 태그 예시 (1.0.BUILD_NUMBER)
-                    def version = "1.0." + env.BUILD_NUMBER
-                    // 최종 이미지 태그
-                    def fullImageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${version}"
+                withCredentials([file(credentialsId: 'jenkins-gcr-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    script {
+                        def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+                        def imageTag = "${CONTAINER_REGISTRY_URL}/${IMAGE_NAME}:${BACKEND_VERSION}-${shortCommit}"
 
-                    // Docker build
-                    sh "docker build -t ${fullImageTag} ."
-
-                    // 로그인 필요 시 (ex: docker login my-registry.com)
-                    // withCredentials(...) { ... } 구문 혹은 명령어
-
-                    // Docker push
-                    sh "docker push ${fullImageTag}"
-
-                    // 파이프라인 환경변수에 저장
-                    env.NEW_IMAGE_TAG = fullImageTag
-                }
-            }
-        }
-        stage('Update K8s Manifests') {
-            steps {
-                script {
-                    // 1) K8s 매니페스트 Repo (GitRepo #2) 클론
-                    sh "rm -rf ${K8S_REPO_DIR}"
-                    sh "git clone ${K8S_REPO_URL} ${K8S_REPO_DIR}"
-
-                    // 2) deployment.yaml에서 image: 줄 변경
-                    // 예: backend/deployment.yaml 가 있다고 가정
-                    sh """
-                    sed -i 's|image: .*$|image: ${env.NEW_IMAGE_TAG}|' ${K8S_REPO_DIR}/backend/deployment.yaml
-                    """
-
-                    // 3) Git commit & push
-                    dir("${K8S_REPO_DIR}") {
+                         // dockerconfigjson Secret 으로 이미 로그인 상태
                         sh """
-                        git config user.name "jenkins-bot"
-                        git config user.email "jenkins@local"
-                        git commit -am "Update backend image to ${env.NEW_IMAGE_TAG}"
-                        git push origin main
+
+                        gcloud auth activate-service-account --key-file=\$GOOGLE_APPLICATION_CREDENTIALS
+
+                        docker build -t ${imageTag} .
+                        docker push ${imageTag}
                         """
+                        env.NEW_IMAGE_TAG = imageTag
+
                     }
                 }
             }
         }
+
+        stage('Checkout K8s Repo') {
+            steps {
+                // 별도의 디렉토리 'k8s-repo'에 well-plate-k8s 레포지토리를 체크아웃
+                dir('k8s-repo') {
+                    git branch: 'main',
+                        credentialsId: 'new-pat-hoan1015-gmail',
+                        url: "https://${K8S_REPO_URL}"
+
+                    sh 'ls -l well-plate/backend/'
+                }
+            }
+        }
+
+        stage('Bump Kubernetes YAML') {
+            steps {
+                dir('k8s-repo') {
+                    // GitHub에 푸시할 준비를 위해 Git 설정
+                    withCredentials([usernamePassword(credentialsId: 'new-pat-hoan1015-gmail', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        script {
+                            sh """
+                            git config user.email "hoan1015@gmail.com"
+                            git config user.name ${GIT_USERNAME}
+
+                            sed -i 's|image:.*|image: ${env.NEW_IMAGE_TAG}|' ${env.ARGO_MANIFEST_BACKEND_PATH}
+
+                            git add ${env.ARGO_MANIFEST_BACKEND_PATH}
+                            git commit -m "Update backend image to ${env.NEW_IMAGE_TAG}"
+
+                            git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@${K8S_REPO_URL}
+                            git push origin HEAD:main
+
+                            """
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

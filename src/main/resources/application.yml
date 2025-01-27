@@ -30,6 +30,7 @@ spring:
       show-sql:
         use_sql_comments: ${logging.default-show-sql}
         use_jdbc_metadata_defaults: ${logging.default-show-sql}
+    open-in-view: false
   flyway:
     enabled: true
     create-schemas: true
@@ -57,16 +58,6 @@ management:
       exposure:
         include: health
 
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
-    import:
-      - classpath:parameters/logging/logging.yml
-      - classpath:parameters/db/db.yml
-      - classpath:parameters/jwt/jwt.yml
 application:
   security:
     jwt:
@@ -74,6 +65,16 @@ application:
       expiration: ${jwt.expiration}
       refresh-token:
         expiration: ${jwt.refresh-token.expiration}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+    import:
+      - classpath:parameters/local/logging/logging.yml
+      - classpath:parameters/local/db/db.yml
+      - classpath:parameters/local/jwt/jwt.yml
 
 ---
 spring:
@@ -87,10 +88,4 @@ spring:
   docker:
     compose:
       enabled: false
-application:
-  security:
-    jwt:
-      secret-key: ${jwt.secret-key}
-      expiration: ${jwt.expiration}
-      refresh-token:
-        expiration: ${jwt.refresh-token.expiration}
+

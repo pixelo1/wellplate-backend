@@ -3,14 +3,18 @@ spring:
     active: test
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-#    url: "jdbc:tc:postgis:16-3.4:///postgres"
     url: "jdbc:tc:postgresql:12.22:///postgres"
     username: user
     password: 1234
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+      idle-timeout: 300000
+      max-lifetime: 1800000
   jpa:
     database: postgresql
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       format_sql: true
       show-sql:
@@ -20,6 +24,7 @@ spring:
     enabled: true
     create-schemas: true
     baseline-version: 0
+    baseline-on-migrate: true
 
 application:
   security:
