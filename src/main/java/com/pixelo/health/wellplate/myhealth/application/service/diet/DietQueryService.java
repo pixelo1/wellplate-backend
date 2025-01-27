@@ -6,7 +6,6 @@ import com.pixelo.health.wellplate.myhealth.application.out.DietOutputPort;
 import com.pixelo.health.wellplate.myhealth.application.vo.diet.DietVo;
 import com.pixelo.health.wellplate.myhealth.application.vo.diet.DietVoMapStruct;
 import com.pixelo.health.wellplate.myhealth.domain.diet.Diet;
-import com.pixelo.health.wellplate.myhealth.domain.diet.adapter.DietAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ public class DietQueryService implements DietQueryInputPort {
     @Override
     public List<DietVo> getRegisteredDiet(GetRegisteredDietQuery query) {
         List<Diet> diets = dietOutputPort.findByWellnessChallenger(query.wellnessChallengerId(), query.healthId());
-        return diets.stream().map(diet -> DietAdapter.builder().diet(diet).build())
+        return diets.stream()
                 .map(dietVoMapStruct::toDietVo)
                 .toList();
     }

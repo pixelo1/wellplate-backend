@@ -18,12 +18,14 @@ import java.util.UUID;
 @Builder
 public class GetRegisteredDietResponse {
 
+
     private List<DietResponse> diets;
 
 
     @Getter
     @Builder
     public static class DietResponse {
+        private BigDecimal totalCalories;
         private UUID dietId;
         private LocalDateTime mealTime;
         private List<FoodInfoRequest> foodInfos;

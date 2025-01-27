@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 @Builder
 public record FoodVo(
+        String foodCode,
         String name,
         BigDecimal calorie
 ) {

@@ -35,6 +35,10 @@ public class CreateDietRequest {
     @AllArgsConstructor
     public static class FoodInfoRequest {
         @NotNull
+        @Schema(title = "식품 코드", example = "P108-003000400-0285")
+        private String foodCode;
+
+        @NotNull
         @Schema(title = "음식명", example = "된장찌개")
         private String foodName;
 

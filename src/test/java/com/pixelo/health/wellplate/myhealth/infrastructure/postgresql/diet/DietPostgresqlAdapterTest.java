@@ -33,6 +33,7 @@ class DietPostgresqlAdapterTest {
                 .mealTime(LocalDateTime.now())
                 .build();
         Food food = Food.builder()
+                .foodCode("1")
                 .name("김치찌개")
                 .calorie(BigDecimal.valueOf(199))
                 .build();
@@ -40,6 +41,6 @@ class DietPostgresqlAdapterTest {
 
         Diet saved = dietPostgresqlAdapter.save(diet);
         Assertions.assertEquals(saved.dietId(), diet.dietId());
-        Assertions.assertEquals(saved.foodInfo().foodsSize(), diet.foodInfo().foodsSize());
+        Assertions.assertEquals(saved.foods().size(), diet.foods().size());
     }
 }

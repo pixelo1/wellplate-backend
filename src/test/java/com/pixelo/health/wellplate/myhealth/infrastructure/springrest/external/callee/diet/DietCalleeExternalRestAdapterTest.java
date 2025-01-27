@@ -117,7 +117,7 @@ class DietCalleeExternalRestAdapterTest {
         var validateFoodRequestNegativeCalorie = validator.validate(foodInfoRequestNegativeCalorie);
         //then
         Assertions.assertThat(validateDietRequestResult.size()).isEqualTo(2);
-        Assertions.assertThat(validateFoodInfoRequestResult.size()).isEqualTo(2);
-        Assertions.assertThat(validateFoodRequestNegativeCalorie.size()).isEqualTo(2);
+        Assertions.assertThat(validateFoodInfoRequestResult.size()).isEqualTo(3);
+        Assertions.assertThat(validateFoodRequestNegativeCalorie.size()).isEqualTo(3);
     }
 }

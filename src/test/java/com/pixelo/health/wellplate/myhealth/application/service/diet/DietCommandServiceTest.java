@@ -7,7 +7,6 @@ import com.pixelo.health.wellplate.myhealth.application.vo.diet.DietVo;
 import com.pixelo.health.wellplate.myhealth.application.vo.diet.DietVoMapStruct;
 import com.pixelo.health.wellplate.myhealth.application.vo.diet.DietVoMapStructImpl;
 import com.pixelo.health.wellplate.myhealth.domain.diet.Diet;
-import com.pixelo.health.wellplate.myhealth.domain.diet.adapter.DietAdapter;
 import com.pixelo.health.wellplate.myhealth.domain.diet.domainservice.DietFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -54,6 +53,7 @@ class DietCommandServiceTest {
     @Test
     void 식단_등록_생성_필수값() {
         var createFoodInfo = CreateDietCommand.CreateFoodInfo.builder()
+                .foodCode("1")
                 .foodName("밥")
                 .calorie(BigDecimal.valueOf(100))
                 .build();
@@ -75,9 +75,8 @@ class DietCommandServiceTest {
         Mockito.when(dietOutputPort.save(Mockito.any(Diet.class)))
                 .thenReturn(diet);
 
-        var dietAdapter = DietAdapter.builder().diet(diet).build();
-        var dietVo = dietVoMapStructImpl.toDietVo(dietAdapter);
-        Mockito.when(dietVoMapStruct.toDietVo(Mockito.any(DietAdapter.class)))
+        var dietVo = dietVoMapStructImpl.toDietVo(diet);
+        Mockito.when(dietVoMapStruct.toDietVo(Mockito.any(Diet.class)))
                 .thenReturn(dietVo);
         //when
         DietVo result = dietCommandService.createDiet(command);
@@ -88,8 +87,8 @@ class DietCommandServiceTest {
         assertEquals(diet.healthId(), result.healthId());
         assertEquals(diet.wellnessChallengerId(), result.wellnessChallengerId());
         assertEquals(diet.mealTime(), result.mealTime());
-        assertEquals(diet.foodInfo().foods().get(0).name(), result.foodVos().get(0).name());
-        assertEquals(diet.foodInfo().foods().get(0).calorie(), result.foodVos().get(0).calorie());
+        assertEquals(diet.foods().get(0).name(), result.foodVos().get(0).name());
+        assertEquals(diet.foods().get(0).calorie(), result.foodVos().get(0).calorie());
 
         Mockito.verify(healthOutputPort, Mockito.times(1)).checkHealthIdOrException(Mockito.any(UUID.class));
     }
