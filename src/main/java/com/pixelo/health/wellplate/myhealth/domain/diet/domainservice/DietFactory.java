@@ -32,6 +32,7 @@ public class DietFactory {
 
     private Food createFood(CreateDietDto.CreateFoodInfoDto dto) {
         return Food.builder()
+                .foodCode(dto.foodCode())
                 .name(dto.foodName())
                 .calorie(dto.calorie())
                 .build();

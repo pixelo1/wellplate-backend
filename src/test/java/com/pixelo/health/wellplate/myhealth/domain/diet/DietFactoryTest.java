@@ -24,10 +24,12 @@ public class DietFactoryTest {
     @Test
     void 식단_등록_Factory() {
         CreateDietDto.CreateFoodInfoDto foodInfoDto1 = CreateDietDto.CreateFoodInfoDto.builder()
+                .foodCode("1")
                 .foodName("된장찌개")
                 .calorie(BigDecimal.valueOf(100))
                 .build();
         CreateDietDto.CreateFoodInfoDto foodInfoDto2 = CreateDietDto.CreateFoodInfoDto.builder()
+                .foodCode("2")
                 .foodName("돼지고기")
                 .calorie(BigDecimal.valueOf(300))
                 .build();
@@ -53,7 +55,7 @@ public class DietFactoryTest {
         assertThat(diet.healthId()).isEqualTo(createDietDto.healthId());
         assertThat(diet.mealTime()).isEqualTo(createDietDto.mealTime());
 
-        List<Food> foods = diet.foodInfo().foods();
+        List<Food> foods = diet.foods();
         assertThat(foods.size()).isEqualTo(2);
         foods.sort(Comparator.comparing(Food::calorie).reversed());
 

@@ -17,6 +17,7 @@ public record CreateDietCommand(
 ) {
     @Builder
     public record CreateFoodInfo(
+            String foodCode,
             String foodName,
             BigDecimal calorie
     ) {

@@ -6,7 +6,6 @@ import com.pixelo.health.wellplate.myhealth.application.out.DietOutputPort;
 import com.pixelo.health.wellplate.myhealth.application.out.HealthOutputPort;
 import com.pixelo.health.wellplate.myhealth.application.vo.diet.DietVo;
 import com.pixelo.health.wellplate.myhealth.application.vo.diet.DietVoMapStruct;
-import com.pixelo.health.wellplate.myhealth.domain.diet.adapter.DietAdapter;
 import com.pixelo.health.wellplate.myhealth.domain.diet.domainservice.DietFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ public class DietCommandService implements DietCommandInputPort {
         var createDietDto = dietCommandMapStruct.toCreateDietDto(command);
         var diet = dietFactory.createDiet(createDietDto);
         var savedDiet = dietOutputPort.save(diet);
-        var dietAdapter = DietAdapter.builder().diet(savedDiet).build();
-        return dietVoMapStruct.toDietVo(dietAdapter);
+        return dietVoMapStruct.toDietVo(savedDiet);
     }
 }

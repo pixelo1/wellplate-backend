@@ -4,19 +4,20 @@ import com.pixelo.health.wellplate.myhealth.domain.diet.valueobjects.Food;
 import com.pixelo.health.wellplate.myhealth.domain.diet.valueobjects.FoodInfo;
 import com.pixelo.health.wellplate.myhealth.domain.share.Date;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.util.Assert;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode(of = "dietId")
@@ -75,12 +76,16 @@ public class Diet {
     public UUID wellnessChallengerId() {
         return this.wellnessChallengerId;
     }
-    public FoodInfo foodInfo() {
-        return this.foodInfo;
+    public List<Food> foods() {
+        return this.foodInfo.foods();
     }
     public LocalDateTime mealTime() {
         return this.mealTime;
     }
 
+    public BigDecimal totalCalories() {
+        return foods().stream()
+                .reduce(BigDecimal.ZERO, (acc, food) -> acc.add(food.calorie()), BigDecimal::add);
+    }
 
 }

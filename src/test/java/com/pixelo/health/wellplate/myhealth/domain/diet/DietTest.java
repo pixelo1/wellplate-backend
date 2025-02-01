@@ -61,6 +61,7 @@ class DietTest {
         //when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             Food.builder()
+                    .foodCode("1")
                     .name(name)
                     .calorie(calorie)
                     .build();

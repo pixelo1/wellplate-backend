@@ -17,6 +17,7 @@ public record CreateDietDto(
 ) {
     @Builder
     public record CreateFoodInfoDto(
+            String foodCode,
             String foodName,
             BigDecimal calorie
     ) {
