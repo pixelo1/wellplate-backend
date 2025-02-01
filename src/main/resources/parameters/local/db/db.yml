@@ -1,7 +1,7 @@
 rdb:
   engine: postgresql
   dbname: wellplate
-  port: 5432
+  port: 15432
   host: localhost
   username: wellplate
   password: wellplate1234

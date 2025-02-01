@@ -2,8 +2,8 @@ package com.pixelo.health.wellplate.authentication.infrastructure.postgresql;
 
 import com.pixelo.health.wellplate.authentication.application.out.AuthMemberOutputPort;
 import com.pixelo.health.wellplate.authentication.domain.member.AuthMember;
-import com.pixelo.health.wellplate.core.spi.JwtUserDetails;
-import com.pixelo.health.wellplate.core.spi.UserService;
+import com.pixelo.health.wellplate.framework.spi.JwtUserDetails;
+import com.pixelo.health.wellplate.framework.spi.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

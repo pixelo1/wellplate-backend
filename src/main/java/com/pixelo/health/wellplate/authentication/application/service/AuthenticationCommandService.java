@@ -7,7 +7,7 @@ import com.pixelo.health.wellplate.authentication.application.out.*;
 import com.pixelo.health.wellplate.authentication.application.vo.TokenVo;
 import com.pixelo.health.wellplate.authentication.domain.member.AuthMember;
 import com.pixelo.health.wellplate.authentication.domain.token.Token;
-import com.pixelo.health.wellplate.core.spi.JwtUserDetails;
+import com.pixelo.health.wellplate.framework.spi.JwtUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

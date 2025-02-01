@@ -1,7 +1,7 @@
 package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet;
 
-import com.pixelo.health.wellplate.core.spi.AuthUser;
-import com.pixelo.health.wellplate.core.spi.ResultResponse;
+import com.pixelo.health.wellplate.framework.spi.AuthUser;
+import com.pixelo.health.wellplate.framework.spi.ResultResponse;
 import com.pixelo.health.wellplate.myhealth.application.in.command.diet.DietCommandInputPort;
 import com.pixelo.health.wellplate.myhealth.application.in.query.diet.DietQueryInputPort;
 import com.pixelo.health.wellplate.myhealth.application.in.query.diet.GetRegisteredDietQuery;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController

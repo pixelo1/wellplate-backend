@@ -1,6 +1,6 @@
 package com.pixelo.health.wellplate.membership.infrastructure.postgresql;
 
-import com.pixelo.health.wellplate.membership.domain.Member;
+import com.pixelo.health.wellplate.membership.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

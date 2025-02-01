@@ -1,7 +1,7 @@
 package com.pixelo.health.wellplate.membership.infrastructure.postgresql;
 
 import com.pixelo.health.wellplate.membership.application.out.MemberOutputPort;
-import com.pixelo.health.wellplate.membership.domain.Member;
+import com.pixelo.health.wellplate.membership.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

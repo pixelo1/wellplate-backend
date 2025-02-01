@@ -6,7 +6,7 @@ import com.pixelo.health.wellplate.authentication.infrastructure.springrest.exte
 import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.request.LogoutRequest;
 import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.request.RefreshTokenRequest;
 import com.pixelo.health.wellplate.authentication.infrastructure.springrest.external.callee.response.AuthenticationResponse;
-import com.pixelo.health.wellplate.core.spi.ResultResponse;
+import com.pixelo.health.wellplate.framework.spi.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

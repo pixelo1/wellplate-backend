@@ -1,7 +1,7 @@
 package com.pixelo.health.wellplate.membership.infrastructure.postgresql;
 
-import com.pixelo.health.wellplate.membership.domain.Member;
-import com.pixelo.health.wellplate.membership.domain.MemberType;
+import com.pixelo.health.wellplate.membership.domain.member.Member;
+import com.pixelo.health.wellplate.membership.domain.member.MemberType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(MemberPostgresqlAdapter.class)
+//@EmbeddedKafka
 class MemberPostgresqlAdapterTest {
 
     @Autowired

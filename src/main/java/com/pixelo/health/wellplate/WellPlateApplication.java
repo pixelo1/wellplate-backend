@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableRetry
 @SpringBootApplication
-@Modulithic(sharedModules = {"core"})
+@Modulithic(sharedModules = {"framework"})
 public class WellPlateApplication {
 
     public static void main(String[] args) {

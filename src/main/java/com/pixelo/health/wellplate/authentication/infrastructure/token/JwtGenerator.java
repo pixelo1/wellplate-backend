@@ -1,7 +1,7 @@
 package com.pixelo.health.wellplate.authentication.infrastructure.token;
 
 import com.pixelo.health.wellplate.authentication.application.out.TokenGeneratorOutputPort;
-import com.pixelo.health.wellplate.core.spi.JwtUserDetails;
+import com.pixelo.health.wellplate.framework.spi.JwtUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
