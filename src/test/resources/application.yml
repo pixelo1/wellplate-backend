@@ -25,6 +25,9 @@ spring:
     create-schemas: true
     baseline-version: 0
     baseline-on-migrate: true
+  kafka:
+    bootstrap-servers: localhost:9092
+
 
 application:
   security:
