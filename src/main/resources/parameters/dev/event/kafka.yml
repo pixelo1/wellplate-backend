@@ -1,2 +1,2 @@
 kafka:
-  bootstrap-servers: localhost:9092
+  bootstrap-servers: kafka-headless:9092

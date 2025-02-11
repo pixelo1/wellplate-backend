@@ -64,6 +64,7 @@ public class Member{
     }
 
 
+    //todo event timeout 설정 필요
     public MemberEvent<MemberCreatedEvent> memberCreatedEvent() {
         MemberCreatedEvent memberCreatedEvent = MemberCreatedEvent.builder()
                 .memberId(this.memberId)

@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
     }
 
-    private static boolean authenticationTokenValidation() {
+    private boolean authenticationTokenValidation() {
         return SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 
