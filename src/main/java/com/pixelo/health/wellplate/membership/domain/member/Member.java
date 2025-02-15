@@ -7,8 +7,11 @@ import com.pixelo.health.wellplate.membership.domain.member.event.Topic;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
+import java.util.Collection;
 import java.util.UUID;
 
 
@@ -16,7 +19,7 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @Table(name = "member", schema = "wellplate")
-public class Member{
+public class Member implements UserDetails {
 
     @Id
     private UUID memberId;
@@ -82,6 +85,49 @@ public class Member{
                 .build();
     }
 
+    /**
+     * authenticate를 위한 override
+     * */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // 여러 권한을 가질 수 있으므로 Collection으로 반환
+//        var authority = new SimpleGrantedAuthority();
+//        var simpleGrantedAuthorities = new ArrayList<SimpleGrantedAuthority>();
+//        simpleGrantedAuthorities.addAll();
+        return memberType.getAuthorities();
+    }
 
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return loginId;
+    }
+
+    /**
+     * 계정 탈퇴, 비밀번호 변경, 휴면, 락 등 정책을 추가해주면 된다
+     * */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 }

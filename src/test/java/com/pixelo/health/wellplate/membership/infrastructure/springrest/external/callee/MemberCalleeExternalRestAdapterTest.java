@@ -2,7 +2,7 @@ package com.pixelo.health.wellplate.membership.infrastructure.springrest.externa
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pixelo.health.wellplate.framework.filter.SecurityConfig;
+import com.pixelo.health.wellplate.framework.config.SecurityConfig;
 import com.pixelo.health.wellplate.framework.rest.ControllerAdvice;
 import com.pixelo.health.wellplate.framework.spi.ResultResponse;
 import com.pixelo.health.wellplate.membership.application.in.command.MemberCommandInputPort;

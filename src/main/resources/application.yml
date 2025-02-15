@@ -60,13 +60,6 @@ management:
       exposure:
         include: health
 
-application:
-  security:
-    jwt:
-      secret-key: ${jwt.secret-key}
-      expiration: ${jwt.expiration}
-      refresh-token:
-        expiration: ${jwt.refresh-token.expiration}
 
 ---
 spring:

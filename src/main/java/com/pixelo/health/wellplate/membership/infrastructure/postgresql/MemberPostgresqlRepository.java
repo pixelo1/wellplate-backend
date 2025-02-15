@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface MemberPostgresqlRepository extends JpaRepository<Member, UUID> {
     //todo loginId -> PIID 로 (pii 거쳐서 loginId 검색 piId 리턴 -> piId가 있는 wellnessChallengerId )
     Optional<Member> findByEmail(String email);
+
+    Optional<Member> findByLoginId(String loginId);
 }

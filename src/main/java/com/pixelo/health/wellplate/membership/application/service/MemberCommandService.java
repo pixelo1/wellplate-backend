@@ -5,14 +5,11 @@ import com.pixelo.health.wellplate.membership.application.in.command.RegisterMem
 import com.pixelo.health.wellplate.membership.application.out.EventOutputPort;
 import com.pixelo.health.wellplate.membership.application.out.dto.ExternalEventDto;
 import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
-import com.pixelo.health.wellplate.membership.domain.member.event.MemberCreatedEvent;
 import com.pixelo.health.wellplate.membership.domain.member.event.MemberEvent;
 import com.pixelo.health.wellplate.membership.domain.member.provider.MemberProviderImpl;
 import com.pixelo.health.wellplate.membership.application.out.MemberOutputPort;
 import com.pixelo.health.wellplate.membership.domain.member.domainservices.MemberFactory;
 import com.pixelo.health.wellplate.membership.domain.member.domainservices.dtos.CreateMemberDto;
-import com.pixelo.health.wellplate.membership.infrastructure.event.kafka.KafkaEventType;
-import com.pixelo.health.wellplate.membership.infrastructure.event.kafka.KafkaTopic;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
