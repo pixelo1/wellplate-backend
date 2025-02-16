@@ -60,7 +60,6 @@ management:
       exposure:
         include: health
 
-
 ---
 spring:
   config:
@@ -85,4 +84,3 @@ spring:
   docker:
     compose:
       enabled: false
-
