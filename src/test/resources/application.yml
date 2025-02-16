@@ -25,11 +25,7 @@ spring:
     create-schemas: true
     baseline-version: 0
     baseline-on-migrate: true
+  kafka:
+    bootstrap-servers: localhost:9092
 
-application:
-  security:
-    jwt:
-      secret-key: test
-      expiration: 100000
-      refresh-token:
-        expiration: 1000000
+

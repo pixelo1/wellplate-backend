@@ -1,14 +1,14 @@
 package com.pixelo.health.wellplate.membership.application.service;
 
 import com.pixelo.health.wellplate.membership.application.in.command.RegisterMemberCommand;
-import com.pixelo.health.wellplate.membership.application.out.InternalEventOutputPort;
+import com.pixelo.health.wellplate.membership.application.out.EventOutputPort;
 import com.pixelo.health.wellplate.membership.application.out.MemberOutputPort;
+import com.pixelo.health.wellplate.membership.application.out.dto.ExternalEventDto;
 import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
-import com.pixelo.health.wellplate.membership.domain.Member;
-import com.pixelo.health.wellplate.membership.domain.domainservices.MemberFactory;
-import com.pixelo.health.wellplate.membership.domain.domainservices.dtos.CreateMemberDto;
-import com.pixelo.health.wellplate.membership.domain.provider.MemberProviderImpl;
-import com.pixelo.health.wellplate.membership.spi.MemberRegisteredEvent;
+import com.pixelo.health.wellplate.membership.domain.member.Member;
+import com.pixelo.health.wellplate.membership.domain.member.domainservices.MemberFactory;
+import com.pixelo.health.wellplate.membership.domain.member.domainservices.dtos.CreateMemberDto;
+import com.pixelo.health.wellplate.membership.domain.member.provider.MemberProviderImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class MemberCommandServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
-    private InternalEventOutputPort interalEventOutputPort;
+    private EventOutputPort eventOutputPort;
 
     @InjectMocks
     private MemberCommandService memberCommandService;
@@ -67,8 +67,9 @@ class MemberCommandServiceTest {
                 .thenReturn(createdMember);
 
 
-        MemberRegisteredEvent memberRegisteredEvent = createdMember.toMemberRegisteredEvent();
-        Mockito.doNothing().when(interalEventOutputPort).publish(memberRegisteredEvent);
+        var memberCreatedEvent = createdMember.memberCreatedEvent();
+//        Mockito.doNothing().when(interalEventOutputPort).internalPublish(memberCreatedEvent);
+        Mockito.doNothing().when(eventOutputPort).externalPublish(Mockito.any(ExternalEventDto.class));
 
         var expectedMemberVo = buildMemberVo(createdMember);
         Mockito.when(memberMapStruct.toMemberVo(Mockito.any(MemberProviderImpl.class)))

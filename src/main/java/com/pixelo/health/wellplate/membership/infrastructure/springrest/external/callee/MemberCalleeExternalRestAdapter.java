@@ -1,7 +1,7 @@
 package com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee;
 
-import com.pixelo.health.wellplate.core.spi.AuthUser;
-import com.pixelo.health.wellplate.core.spi.ResultResponse;
+import com.pixelo.health.wellplate.framework.spi.AuthUser;
+import com.pixelo.health.wellplate.framework.spi.ResultResponse;
 import com.pixelo.health.wellplate.membership.application.in.command.MemberCommandInputPort;
 import com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee.request.RegisterMemberRequest;
 import com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee.response.RegisteredMemberResponse;

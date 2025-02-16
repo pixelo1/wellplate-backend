@@ -1,7 +1,7 @@
 package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.health;
 
-import com.pixelo.health.wellplate.core.spi.AuthUser;
-import com.pixelo.health.wellplate.core.spi.ResultResponse;
+import com.pixelo.health.wellplate.framework.spi.AuthUser;
+import com.pixelo.health.wellplate.framework.spi.ResultResponse;
 import com.pixelo.health.wellplate.myhealth.application.in.command.health.HealthCommandInputPort;
 import com.pixelo.health.wellplate.myhealth.application.in.query.health.GetRegisteredHealthQuery;
 import com.pixelo.health.wellplate.myhealth.application.in.query.health.HealthQueryInputPort;

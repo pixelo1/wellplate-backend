@@ -9,4 +9,78 @@ services:
       POSTGRES_USER: ${DB_USERNAME:-wellplate}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-wellplate1234}
       POSTGRES_INITDB_ARGS: --encoding=UTF-8
+    command: ["postgres", "-c", "wal_level=logical"]
     restart: unless-stopped
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.1
+    container_name: zookeeper
+    ports:
+      - "${ZOOKEEPER_PORT:-2181}:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    restart: unless-stopped
+  kafka:
+    image: confluentinc/cp-kafka:7.2.1
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+
+      # 1) 두 리스너 정의
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+
+      # 2) 광고 (내부=INSIDE, 외부=OUTSIDE)
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:29092,OUTSIDE://localhost:9092
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    restart: unless-stopped
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest # alpine:3.15
+    container_name: kafka-ui
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:29092"
+    ports:
+      - "8089:8080"
+    restart: unless-stopped
+
+  # 3) Kafka Connect + Debezium
+  kafka-connect:
+    image: debezium/connect:3.0.0.Final
+    container_name: kafka-connect
+    depends_on:
+      - kafka
+    environment:
+      BOOTSTRAP_SERVERS: "kafka:29092"
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: debezium_config
+      OFFSET_STORAGE_TOPIC: debezium_offset
+      STATUS_STORAGE_TOPIC: debezium_status
+      KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      # Debezium plugin path
+      PLUGIN_PATH: /kafka/libs
+    ports:
+      - "8083:8083"  # Kafka Connect REST API
+    restart: unless-stopped
+
+  # 4) Connector Registrator (스타트업 스크립트 전용)
+  connector-registrator:
+    image: curlimages/curl:7.88.1   # 심플하게 curl 전용 이미지 사용
+    container_name: connector-registrator
+    depends_on:
+      - kafka-connect
+    entrypoint: ["/bin/sh", "/scripts/register-connector.sh"]
+    volumes:
+      - ./scripts:/scripts
+    restart: "no"

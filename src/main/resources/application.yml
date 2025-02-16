@@ -41,6 +41,8 @@ spring:
   docker:
     compose:
       enabled: true
+  kafka:
+    bootstrap-servers: ${kafka.bootstrap-servers}
 
 
 logging:
@@ -58,13 +60,6 @@ management:
       exposure:
         include: health
 
-application:
-  security:
-    jwt:
-      secret-key: ${jwt.secret-key}
-      expiration: ${jwt.expiration}
-      refresh-token:
-        expiration: ${jwt.refresh-token.expiration}
 
 ---
 spring:
@@ -75,6 +70,7 @@ spring:
       - classpath:parameters/local/logging/logging.yml
       - classpath:parameters/local/db/db.yml
       - classpath:parameters/local/jwt/jwt.yml
+      - classpath:parameters/local/event/kafka.yml
 
 ---
 spring:
@@ -85,6 +81,7 @@ spring:
       - classpath:parameters/dev/logging/logging.yml
       - classpath:parameters/dev/db/db.yml
       - classpath:parameters/dev/jwt/jwt.yml
+      - classpath:parameters/dev/event/kafka.yml
   docker:
     compose:
       enabled: false

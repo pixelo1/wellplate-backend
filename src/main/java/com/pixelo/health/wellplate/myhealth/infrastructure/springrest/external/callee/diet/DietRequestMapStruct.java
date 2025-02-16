@@ -1,6 +1,6 @@
 package com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet;
 
-import com.pixelo.health.wellplate.core.spi.AuthUser;
+import com.pixelo.health.wellplate.framework.spi.AuthUser;
 import com.pixelo.health.wellplate.myhealth.application.in.command.diet.CreateDietCommand;
 import com.pixelo.health.wellplate.myhealth.infrastructure.springrest.external.callee.diet.request.CreateDietRequest;
 import org.mapstruct.Mapper;

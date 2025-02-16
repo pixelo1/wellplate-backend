@@ -2,13 +2,13 @@ package com.pixelo.health.wellplate.membership.infrastructure.springrest.externa
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pixelo.health.wellplate.core.filter.SecurityConfig;
-import com.pixelo.health.wellplate.core.rest.ControllerAdvice;
-import com.pixelo.health.wellplate.core.spi.ResultResponse;
+import com.pixelo.health.wellplate.framework.config.SecurityConfig;
+import com.pixelo.health.wellplate.framework.rest.ControllerAdvice;
+import com.pixelo.health.wellplate.framework.spi.ResultResponse;
 import com.pixelo.health.wellplate.membership.application.in.command.MemberCommandInputPort;
 import com.pixelo.health.wellplate.membership.application.in.command.RegisterMemberCommand;
 import com.pixelo.health.wellplate.membership.application.vo.MemberVo;
-import com.pixelo.health.wellplate.membership.domain.MemberType;
+import com.pixelo.health.wellplate.membership.domain.member.MemberType;
 import com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee.request.RegisterMemberRequest;
 import com.pixelo.health.wellplate.membership.infrastructure.springrest.external.callee.response.RegisteredMemberResponse;
 import org.assertj.core.api.Assertions;
