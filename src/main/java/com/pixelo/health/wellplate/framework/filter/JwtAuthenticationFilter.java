@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -28,6 +29,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
         var jwtToken = getToken(authorizationHeader);
+
+        if (ObjectUtils.isEmpty(jwtToken)) {
+            throw new IllegalArgumentException("Token is null");
+        }
 
         var memberId = tokenGeneratorOutputPort.extractMemberId(jwtToken);
         var jwtUserDetails = userService.findUserById(memberId);
