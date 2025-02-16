@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 // bean으로 만들경우 servlet fileter에 자동으로 등록되어 security에서 걸러도 자동 식행됨
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -27,9 +29,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("request : {}", request.toString());
         var authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
+        log.info("authorizationHeader : {}", authorizationHeader);
         var jwtToken = getToken(authorizationHeader);
-
+        log.info("jwtToken : {}", jwtToken);
         if (ObjectUtils.isEmpty(jwtToken)) {
             throw new IllegalArgumentException("Token is null");
         }
