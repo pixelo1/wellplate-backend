@@ -41,7 +41,8 @@ public class SecurityConfig {
             "/h2-console/**",
             "/swagger-ui/**",
             "/swagger-resources/**",
-            "/v3/api-docs/**"};
+            "/v3/api-docs/**"
+    };
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
