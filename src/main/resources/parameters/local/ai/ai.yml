@@ -1,0 +1,4 @@
+ai:
+  open-ai:
+    api:
+      key: 'api key'
