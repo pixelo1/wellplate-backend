@@ -28,4 +28,6 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
 
-
+open-ai:
+  api:
+    key: 'api key'
